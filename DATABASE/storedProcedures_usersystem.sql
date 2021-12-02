@@ -137,14 +137,14 @@
 
 
 -- ------------------------------Add task-----------------------------
--- create procedure dbo.spTasks_AddTask
+-- alter procedure dbo.spTasks_AddTask
 --     @taskname varchar(50),
 --     @projectId int,
 --     @userId int,
 --     @taskDescription VARCHAR(500)
 --     AS
 --     BEGIN
---         insert into dbo.tasks(taskName, projectId, userId, taskDescription) 
+--         insert into dbo.tasks(taskName, project_Id, userId, taskDescription) 
 --                         values(@taskname, @projectId, @userId, @taskDescription)
 --     END
 

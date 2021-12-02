@@ -15,7 +15,9 @@
 -- create table dbo.tasks(
 --     taskId int IDENTITY(1,1) not null,
 --     taskName varchar(50) not null,
---     projectId int not null,
+--     project_Id int not null,
+--     CONSTRAINT FK_project FOREIGN key (project_Id)
+--     REFERENCES dbo.projects(projectId),
 --     userId int not null,
 --     taskDescription varchar(500) null
 -- )
@@ -59,6 +61,7 @@
 -- ///////////////////////////////////////////////////////////////////////////////////////////////////////-------
 
 -----------------------user projects link table------------s
+
 -- create table dbo.usersProjects(
 --     userId int not null unique,
 --      CONSTRAINT fk_userId FOREIGN KEY (userId) 

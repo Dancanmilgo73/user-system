@@ -1,0 +1,27 @@
+POST http://localhost:3001/user/register
+Content-Type: application/json
+
+{
+    "email": "dan@dan",
+    "username": "Dante",
+    "password": "Email@2021@",
+    "confirmPassword": "Email@2021@"
+}
+###
+
+POST  http://localhost:3001/user/login
+Content-Type: application/json
+
+{
+    "email": "dan@dan",
+    "password": "Email@2021@"
+}
+
+###
+PATCH   http://localhost:3001/user/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiRGFudGUiLCJwYXNzd29yZCI6IiQyYiQxMCRUR2diVWZiTUdvODJVY3hERTFXUDB1bTBhQlpqdzBuQS5qNnNuUGZoUS5PeTU1c2lYeGFiaSIsImVtYWlsIjoiZGFuQGRhbiIsImlhdCI6MTYzODQ1MTM0MywiZXhwIjoxNjM4NDU0OTQzfQ.ATRfzrdRaRTwkgqoeZXICcLncj0RgSCOO8togLUiOw4
+Content-Type: application/json
+
+{
+    "newPassword": "Email@2021@@"
+}
