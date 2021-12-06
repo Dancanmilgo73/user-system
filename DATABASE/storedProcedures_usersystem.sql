@@ -33,25 +33,23 @@
 -- exec dbo.spUsers_LoginUser  'tich@gmail'
 
 ------------------------------------------------update user details----------------------
--- create procedure dbo.spUsers_UpdateUser
+-- alter procedure dbo.spUsers_UpdateUser
 --     @id int,
 --     @username VARCHAR(50),
 --     @email VARCHAR(50),
---     @password VARCHAR(500),
---     @roleId int
+--     @password VARCHAR(500)
 -- AS
 -- BEGIN
 --     update dbo.users
 --         set email = @email,
 --             username = @username,
---             password = @password,
---             roleId = @roleId
+--             password = @password
 --         where userId = @id
 -- END
 
 
 
--- exec dbo.spUsers_UpdateUser 7, 'admin', 'dancanmilgo73@gmail.com', 'Dancan2021', 1
+-- exec dbo.spUsers_UpdateUser 7, 'admin', 'dancanmilgo73@gmail.com', 'Dancan2021'
 
 -- ----------------------------------delete user using email-----------------------------
 -- create procedure dbo.spUsers_DeleteUser

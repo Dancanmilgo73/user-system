@@ -1,21 +1,17 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
+const { sqlConfig } = require("../db/config");
+const mssql = require('mssql')
 
-async function Authenticator(req, res, next){
+const Authenticator = async(req, res, next)=>{
     try {
       const authHeader= req.headers['authorization'];
     const token = authHeader.split(' ')[1];
-    console.log(token);
+    // console.log(token);
     if(token == null) return res.status(401).send({message: "Please use a token for access"});
-    // JWT.verify(token, process.env.ACCESS_TOKEN, (err, {email, password, user})=>{
-    //   if(err) return res.sendStatus(403);
-    //    req.body.email = email;
-    //  console.log(req.body)
     const result = await JWT.verify(token, process.env.SECRET_KEY)
     req.body.user = result
-    // console.log("hapa:", result)
-      // console.log(email, password, user);
       next();
     // })
     } catch (error) {
@@ -23,5 +19,16 @@ async function Authenticator(req, res, next){
     }
   }
 
+  const isAdmin = async(req, res, next) => {
+    console.log(req.body.user.email);
+    if(req.body.user.email === req.body.email) return next();
+    try {
+    if(req.body.user.roleId !== 1) return res.status(401).send({message: "Only admins can make this request"})
+      next()
+    } catch (error) {
+      res.status(500).send({message: error.message})
+    }
+  }
 
-  module.exports ={Authenticator}
+
+  module.exports ={Authenticator, isAdmin}
