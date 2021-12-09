@@ -37,19 +37,22 @@
 --     @id int,
 --     @username VARCHAR(50),
 --     @email VARCHAR(50),
---     @password VARCHAR(500)
+--     @password VARCHAR(500),
+--     @roleId int
+
 -- AS
 -- BEGIN
 --     update dbo.users
 --         set email = @email,
 --             username = @username,
---             password = @password
+--             password = @password,
+--             roleId = @roleId
 --         where userId = @id
 -- END
 
 
 
--- exec dbo.spUsers_UpdateUser 7, 'admin', 'dancanmilgo73@gmail.com', 'Dancan2021'
+-- exec dbo.spUsers_UpdateUser 22, 'Admin', 'superAdmin@gmail.com', '$2b$10$4mjuPRBMe9jp1H5tjjKIXeEyNr6.gOS1m/qTQdaFau2QCNd3T0ppa', 1
 
 -- ----------------------------------delete user using email-----------------------------
 -- create procedure dbo.spUsers_DeleteUser
@@ -59,7 +62,7 @@
 --         update dbo.users
 --         set isDeleted = 1 where email = @email
 --     END
--- exec dbo.spUsers_DeleteUser 'tich@gmail'
+-- exec dbo.spUsers_DeleteUser 'dancanmilgo73@gmail.com'
 --------------------------------------Add Project------------------
 -- alter procedure dbo.spUsers_AddProject
 --     @name varchar(50),
@@ -127,7 +130,7 @@
 --     @id int
 --     AS
 --     BEGIN
---         select * from dbo.tasks where projectId = @id and isDeleted = 0
+--         select * from dbo.tasks where taskId = @id and isDeleted = 0
 --     END
 
 
