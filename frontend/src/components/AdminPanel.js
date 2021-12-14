@@ -17,11 +17,16 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
+import SideBar, { mainListItems, secondaryListItems } from "./listItems";
+import ProjectsTable from "./ProjectsTable";
+import UsersList from "./UsersList";
+import TasksTable from "./TasksList";
+import Button from "@mui/material/Button";
+
 // import Chart from "./Chart";
 // import Deposits from "./Deposits";
 // import Orders from "./Orders";
-
+import LogoutIcon from "@mui/icons-material/Logout";
 function Copyright(props) {
 	return (
 		<Typography
@@ -92,7 +97,20 @@ function DashboardContent() {
 	const toggleDrawer = () => {
 		setOpen(!open);
 	};
-
+	const [activeButton, setActiveButton] = React.useState("projects");
+	const toggleActiveButton = (button) => {
+		setActiveButton(button);
+	};
+	const tableContent = (activeButton) => {
+		switch (activeButton) {
+			case "users":
+				return <UsersList />;
+			case "tasks":
+				return <TasksTable />;
+			default:
+				return <ProjectsTable />;
+		}
+	};
 	return (
 		<ThemeProvider theme={mdTheme}>
 			<Box sx={{ display: "flex" }}>
@@ -121,10 +139,11 @@ function DashboardContent() {
 							sx={{ flexGrow: 1 }}>
 							Admin Dashboard
 						</Typography>
-						<IconButton color='inherit'>
-							<Badge badgeContent={4} color='secondary'>
-								<NotificationsIcon />
-							</Badge>
+						<IconButton  color='inherit'>
+							<Button
+								endIcon={<LogoutIcon />}
+								variant='contained'
+								>Log Out</Button>
 						</IconButton>
 					</Toolbar>
 				</AppBar>
@@ -141,7 +160,9 @@ function DashboardContent() {
 						</IconButton>
 					</Toolbar>
 					<Divider />
-					<List>{mainListItems}</List>
+					<List>
+						<SideBar toggleButton={toggleActiveButton} />
+					</List>
 					{/* <Divider /> */}
 					{/* <List>{secondaryListItems}</List> */}
 				</Drawer>
@@ -159,6 +180,8 @@ function DashboardContent() {
 					<Toolbar />
 					<Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
 						{/* The list of projects goes here */}
+						{tableContent(activeButton)}
+						{/* <ProjectsTable /> */}
 
 						<Grid container spacing={3}></Grid>
 						<Copyright sx={{ pt: 4 }} />

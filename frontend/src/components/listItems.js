@@ -10,26 +10,27 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import TaskIcon from "@mui/icons-material/Task";
+import List from "@mui/material/List";
 
-export const mainListItems = (
+const mainListItems = (
 	<div>
-		<ListItem button>
+		{/* <ListItem button>
 			<ListItemIcon>
 				<DashboardIcon />
 			</ListItemIcon>
 			<ListItemText primary='Dashboard' />
+		</ListItem> */}
+		<ListItem button>
+			<ListItemIcon>
+				<BarChartIcon />
+			</ListItemIcon>
+			<ListItemText primary='Projects' />
 		</ListItem>
 		<ListItem button>
 			<ListItemIcon>
 				<PeopleIcon />
 			</ListItemIcon>
 			<ListItemText primary='Users' />
-		</ListItem>
-		<ListItem button>
-			<ListItemIcon>
-				<BarChartIcon />
-			</ListItemIcon>
-			<ListItemText primary='Projects' />
 		</ListItem>
 		<ListItem button>
 			<ListItemIcon>
@@ -69,3 +70,39 @@ export const secondaryListItems = (
 		</ListItem>
 	</div>
 );
+export default function SideBar({toggleButton}) {
+	return (
+		<div>
+			{/* <ListItem button>
+			<ListItemIcon>
+				<DashboardIcon />
+			</ListItemIcon>
+			<ListItemText primary='Dashboard' />
+		</ListItem> */}
+			<ListItem button onClick={()=> toggleButton('projects')}>
+				<ListItemIcon>
+					<BarChartIcon />
+				</ListItemIcon>
+				<ListItemText primary='Projects' />
+			</ListItem>
+			<ListItem button onClick={ () => toggleButton('users') }>
+				<ListItemIcon>
+					<PeopleIcon />
+				</ListItemIcon>
+				<ListItemText primary='Users' />
+			</ListItem>
+			<ListItem button onClick={ () => toggleButton('tasks') }>
+				<ListItemIcon>
+					<TaskIcon />
+				</ListItemIcon>
+				<ListItemText primary='Tasks' />
+			</ListItem>
+			{/* <ListItem button>
+			<ListItemIcon>
+				<LayersIcon />
+			</ListItemIcon>
+			<ListItemText primary='Integrations' />
+		</ListItem> */}
+		</div>
+	);
+}

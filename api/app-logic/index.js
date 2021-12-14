@@ -11,7 +11,7 @@ const sqlConfig = require("./db/dbConfig");
 // const { sqlConfig } = require("../auth_service/db/config");
 // const { sqlConfig } = require('./db/config');
 
-// app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 mssql.connect(sqlConfig).then((pool) => {

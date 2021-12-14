@@ -41,6 +41,8 @@ const getProjectById = async (req, res) => {
 };
 const addProject = async (req, res) => {
 	const { name, description } = req.body;
+	// console.log("hello");
+	console.log(req.body);
 	if (!name)
 		return res
 			.status(401)

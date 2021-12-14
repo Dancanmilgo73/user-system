@@ -7,9 +7,10 @@ const Authenticator = async(req, res, next)=>{
     try {
       const authHeader= req.headers['authorization'];
     const token = authHeader.split(' ')[1];
-    // console.log(token);
+    console.log("t",token);
     if(token == null) return res.status(401).send({message: "Please use a token for access"});
-    const result = await JWT.verify(token, process.env.SECRET_KEY)
+      const result = await JWT.verify(token, process.env.SECRET_KEY)
+      console.log("user,<: ",result);
     req.body.user = result
       next();
     // })

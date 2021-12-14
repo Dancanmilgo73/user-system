@@ -7,7 +7,7 @@ const getAllTasks = async (req, res) => {
 		const pool = await mssql.connect(sqlConfig);
 		const data = await pool.request().execute("dbo.spTasks_GetAllTasks");
 		// const tasks = data.recordset;
-		console.log(data.recordset[0]);
+		// console.log(data.recordset[0]);
 		const tasks = data.recordset.map((task) => {
 			return {
 				id: task.taskId,

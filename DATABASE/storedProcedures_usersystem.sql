@@ -21,16 +21,18 @@
 -- end
 
 
--- exec dbo.spUsers_AddUser 'Ngetich', 'tich@gmail', 'Dancan2021y'
+-- exec dbo.spUsers_AddUser 'tich', 'ch@gmail', 'Dancan2021yy'
 
 ---------------------------------------------login user ----------------------------
--- alter procedure dbo.spUsers_LoginUser
+-- drop procedure if exists dbo.spUsers_SelectUser;
+-- create procedure dbo.spUsers_SelectUser
 --     @email varchar(50)
 -- as
 -- begin 
+
 --     select * from dbo.users where email = @email and isDeleted = 0
 -- end
--- exec dbo.spUsers_LoginUser  'tich@gmail'
+-- exec dbo.spUsers_SelectUser  'felix@gmail.com'
 
 ------------------------------------------------update user details----------------------
 -- alter procedure dbo.spUsers_UpdateUser
@@ -138,15 +140,38 @@
 
 
 -- ------------------------------Add task-----------------------------
--- alter procedure dbo.spTasks_AddTask
+-- drop PROCEDURE if EXISTS dbo.spTasks_AddTask;
+-- create procedure dbo.spTasks_AddTask
 --     @taskname varchar(50),
 --     @projectId int,
---     @userId int,
 --     @taskDescription VARCHAR(500)
 --     AS
 --     BEGIN
---         insert into dbo.tasks(taskName, project_Id, userId, taskDescription) 
---                         values(@taskname, @projectId, @userId, @taskDescription)
+--         insert into dbo.tasks(taskName, project_Id, taskDescription) 
+--                         values(@taskname, @projectId, @taskDescription)
 --     END
 
--- exec dbo.spTasks_AddTask 'Ui', 7, 11, 'create the UI'
+-- exec dbo.spTasks_AddTask 'Ui', 7, 'create the UI'
+
+
+
+-- -------------------------////assign a task/////--------------
+-- drop PROCEDURE if EXISTS dbo.spTasks_AssignTask;
+CREATE PROCEDURE dbo.spTasks_AssignTask
+    @taskId int,
+    @userId INT
+    AS
+    BEGIN
+    set NOCOUNT on;
+        declare @project_Id int;
+        set @project_Id= (select project_Id from dbo.tasks t where t.taskId = @taskId);
+        update dbo.users
+            set projectId = @project_Id
+             where userId = @userId and projectId is NULL;
+        UPDATE dbo.tasks
+            set userId = @userId
+        where taskId = @taskId;
+    END
+
+exec dbo.spTasks_AssignTask 2,5
+   

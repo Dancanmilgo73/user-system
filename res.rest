@@ -47,8 +47,7 @@ Content-Type: application/json
 # ---------------------PROJECTS--------------------------
 ###
 GET http://localhost:3002/projects/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiQWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCQ0bWp1UFJCTWU5anAxSDV0ampLSVhlRXlOcjYuZ09TMW0vcVRRZGFGYXUyUUNOZDNUMHBwYSIsImVtYWlsIjoic3VwZXJBZG1pbkBnbWFpbC5jb20iLCJyb2xlSWQiOjEsImlhdCI6MTYzODg4MTA1MiwiZXhwIjoxNjM4ODg0NjUyfQ.6T1Ia39zVVHVstyL6hzRIuy5ZS9y3_1figgv67Xhub0
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiQWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRBQW5IVkVVR3pxenRxRTU0V1RiSTlPUy53Q21BeGFsNTAwUnJhcjRUQ3BSYjI4YmIxUXd3MiIsImVtYWlsIjoic3VwZXJBZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2MzkzMTU4ODksImV4cCI6MTYzOTMxOTQ4OX0.BVzKKF8cZ1i02On45q4oliCySuFtbApu4ZyErMDSHmo
 
 ###
 GET http://localhost:3002/projects/7
@@ -56,12 +55,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiQWRtaW4iL
 
 ###
 POST  http://localhost:3002/projects/add
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiQWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCQ0bWp1UFJCTWU5anAxSDV0ampLSVhlRXlOcjYuZ09TMW0vcVRRZGFGYXUyUUNOZDNUMHBwYSIsImVtYWlsIjoic3VwZXJBZG1pbkBnbWFpbC5jb20iLCJyb2xlSWQiOjEsImlhdCI6MTYzODg2OTA3NywiZXhwIjoxNjM4ODcyNjc3fQ.XOSJKxyzULR3uQjcyI7dMGOE7h2a3p_JQCfLIiTldyI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiQWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRBQW5IVkVVR3pxenRxRTU0V1RiSTlPUy53Q21BeGFsNTAwUnJhcjRUQ3BSYjI4YmIxUXd3MiIsImVtYWlsIjoic3VwZXJBZG1pbkBnbWFpbC5jb20iLCJyb2xlSWQiOjEsImlhdCI6MTYzOTM5NDE0MiwiZXhwIjoxNjM5Mzk3NzQyfQ.W2sMZ03tlX_TGTIqofUKQxMU0W1aNYqaL9cN09hKuU8
 Content-Type: application/json
 
 {
-    "name": "user system",
-    "description": "A simple project management system"
+    "name": "Test",
+    "description": "A simple Test"
 }
 
 
@@ -75,4 +74,5 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3002/tasks/1
+GET http://localhost:3002/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiQWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRBQW5IVkVVR3pxenRxRTU0V1RiSTlPUy53Q21BeGFsNTAwUnJhcjRUQ3BSYjI4YmIxUXd3MiIsImVtYWlsIjoic3VwZXJBZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2MzkzMTU4ODksImV4cCI6MTYzOTMxOTQ4OX0.BVzKKF8cZ1i02On45q4oliCySuFtbApu4ZyErMDSHmo

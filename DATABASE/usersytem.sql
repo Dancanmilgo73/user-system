@@ -4,22 +4,36 @@
 --     projectDescription VARCHAR(300) null DEFAULT NULL
 
 -- )
+-- ------------------------//////USERS TABLE/////--------------------------
+-- drop table dbo.users
 -- create table dbo.users(
---     userId int IDENTITY(1,1) not null,
+--     userId int IDENTITY(1,1) not null primary key,
 --     username varchar(50) not null,
 --     email varchar(50) not null UNIQUE,
 --     password varchar(500) not null UNIQUE,
---     projectId int not null
+--     RoleId int default 2,
+--     CONSTRAINT FK_roleId FOREIGN KEY(RoleId)
+--     REFERENCES dbo.roles(RoleId),
+--     projectId int default null,
+--     CONSTRAINT FK_projectId FOREIGN KEY(projectId)
+--     REFERENCES dbo.projects(projectId),
+--     isDeleted bit DEFAULT 0
 -- )
-
+-- ----------------------//////TASKS TABLE//////----------------------S
+-- drop table dbo.tasks
 -- create table dbo.tasks(
---     taskId int IDENTITY(1,1) not null,
+--     taskId int IDENTITY(1,1) not null primary key,
 --     taskName varchar(50) not null,
 --     project_Id int not null,
 --     CONSTRAINT FK_project FOREIGN key (project_Id)
 --     REFERENCES dbo.projects(projectId),
---     userId int not null,
---     taskDescription varchar(500) null
+--     userId int default null,
+--     CONSTRAINT FK_userId FOREIGN KEY(userId)
+--     REFERENCES dbo.users(userId),
+--     taskDescription varchar(500) null,
+--     isCompleted bit DEFAULT null,
+--     isSubmitted bit DEFAULT 0,
+--     isDeleted bit default 0
 -- )
 
 
@@ -60,43 +74,25 @@
 --                                                             ('Ahmed', 'Ahemed@dmail.com', 'Ahmed@@');
 -- ///////////////////////////////////////////////////////////////////////////////////////////////////////-------
 
------------------------user projects link table------------s
-
--- create table dbo.usersProjects(
---     userId int not null unique,
---      CONSTRAINT fk_userId FOREIGN KEY (userId) 
---         REFERENCES dbo.users(userId),
---     projectId int not null,
---     CONSTRAINT fk_projectId FOREIGN KEY (projectId) 
---         REFERENCES dbo.projects(projectId)
-
--- )
 
 
--- insert into dbo.projects(projectname) values('XYZ')
-insert into dbo.usersProjects(userId, projectId) values(6,1)
 
-SELECT * from dbo.usersProjects
+insert into dbo.tasks(taskName, taskDescription, project_Id) values('BE','Designing the Backend',3),
+                                                        ('DB', 'Design the database',3),
+                                                        ('UI', 'Design the UI',4);             
+SELECT * from dbo.tasks;
 
-
-insert into dbo.tasks(taskName, projectId, userId, taskDescription) values('BE', 1,6,'Designing the Backend'),
-                                                                           ('DB', 1, 5, 'Design the database')             
-SELECT * from dbo.tasks
-delete from dbo.tasks
 
 select * from dbo.projects
-delete from dbo.projects
+delete from dbo.tasks where taskId = 1
 
-delete from dbo.usersProjects
-alter table dbo.usersProjects
-    add UNIQUE(projectId)
 
-select * from dbo.usersProjects
 
-insert into dbo.users (username, email, [password]) values('Eric', 'Eric@gmail.com', 'Eric2021'),
-                                                        ('Nick', 'nick@gmail.com', 'Nick2021'),
-                                                        ('Felix', 'felix@gmail.com', 'Felix2021')
 
+
+insert into dbo.users (username, email, [password], projectId) values('Dan', 'Danc@gmail.com', 'Dan2021',3), 
+('felix', 'felix@gmail.com', 'Felix2021',3);
+SELECT * from dbo.users
 -- -----------------create a table for roles---------------
 -- create table dbo.roles(
 --     roleId int IDENTITY(1,1) not null,
@@ -149,3 +145,6 @@ alter table dbo.tasks
 select * from dbo.tasks
 
 select * from dbo.usersProjects
+
+delete from dbo.users where userId = 4
+

@@ -59,8 +59,9 @@ const loginUser = async (req, res) => {
 		const data = await pool
 			.request()
 			.input("email", mssql.VarChar, email)
-			.execute("dbo.spUsers_LoginUser");
+			.execute("dbo.spUsers_SelectUser");
 		const user = data.recordset[0];
+		// console.log(user);
 		if (!user) return res.status(401).send({ message: "User not found" });
 		bcrypt.compare(password, user.password, (err, result) => {
 			if (err) return res.status(401).send({ message: err.message });
@@ -72,7 +73,7 @@ const loginUser = async (req, res) => {
 					user: user.username,
 					password: user.password,
 					email: user.email,
-					roleId: user.roleId,
+					roleId: user.RoleId,
 				},
 				process.env.SECRET_KEY,
 				{ expiresIn: "1h" }
