@@ -53,7 +53,7 @@ const addProject = async (req, res) => {
 			.request()
 			.input("name", mssql.VarChar, name)
 			.input("description", mssql.VarChar, description)
-			.execute("dbo.spUsers_AddProject");
+			.execute("dbo.spProjects_AddProject");
 		res.status(200).send({ message: "Project was added" });
 	} catch (error) {
 		res.status(500).send({ message: error.message });

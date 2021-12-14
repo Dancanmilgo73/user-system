@@ -148,4 +148,13 @@ const deleteUser = async (req, res) => {
 		res.status(500).send({ message: error.message });
 	}
 };
-module.exports = { registerUser, loginUser, updateUser, deleteUser };
+const getAllUsers = async (req, res) => {
+	try {
+		const pool = await mssql.connect(sqlConfig);
+		const data = await pool.request().execute("dbo.spUsers_GetAllUsers");
+		res.status(200).json(data);
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+};
+module.exports = { registerUser, loginUser, updateUser, deleteUser, getAllUsers};

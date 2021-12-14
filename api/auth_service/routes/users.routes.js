@@ -4,10 +4,11 @@ const {
 	loginUser,
 	updateUser,
 	deleteUser,
+	getAllUsers,
 } = require("../controllers/users.controller");
 const { Authenticator, isAdmin } = require("../middlewares/Authenticator");
 const router = express.Router();
-// router.route('/').get(Authenticator) Only an admin can get a list of all users
+router.route('/').get(Authenticator, getAllUsers) /* Only an admin can get a list of all users */
 router.route("/login").post(loginUser);
 router.route("/register").post(registerUser);
 // Only the admin and the user who owns the account can update one's details

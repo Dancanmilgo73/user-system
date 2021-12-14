@@ -54,7 +54,7 @@ const assignTask = async (req, res) => {
 			.execute("dbo.spTasks_AssignTask");
 		res
 			.status(200)
-			.send({ message: `Task asingned to the user with the id of ${userId}` });
+			.send({ message: `Task asingned to the user with the id of ${userId}: ${data}` });
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
@@ -65,7 +65,7 @@ const addTask = async (req, res) => {
 		const pool = await mssql.connect(sqlConfig);
 		const data = await pool
 			.request()
-			.input("taskname", mssql.Int, name)
+			.input("taskName", mssql.VarChar, name)
 			.input("projectId", mssql.Int, projectId)
 			.input("taskDescription", mssql.VarChar, description)
 			.execute("dbo.spTasks_AddTask");
@@ -81,7 +81,7 @@ const deleteTask = async (req, res) => {
 		const data = await pool
 			.request()
 			.input("id", mssql.Int, id)
-			.execute("dbo.spTasks_deleteTask");
+			.execute("dbo.spTasks_DeleteTask");
 		res.status(200).send({ message: `Task with id ${id} was deleted` });
 	} catch (error) {
 		res.status(500).send({ message: error.message });
@@ -94,7 +94,7 @@ const updateTask = async (req, res) => {
 			.status(401)
 			.send({ message: "You have to provide the new details to be update" });
 	try {
-		const { id } = req.param;
+		const { id } = req.params;
 		const pool = await mssql.connect(sqlConfig);
 		const data = await pool
 			.request()
@@ -105,25 +105,48 @@ const updateTask = async (req, res) => {
 			"taskDescription",
 			"project_Id",
 			"userId",
+			"isCompleted",
+			"isSubmitted",
 		]);
 		await pool
 			.request()
 			.input("id", mssql.Int, id)
-			.input('name', mssql.VarChar, newName ? newName : task.taskName)
-			.input('description', mssql.VarChar,newDescription ? newDescription : task.description)
-			.execute("dbo.spTasks_updateTask");
+			.input("name", mssql.VarChar, newName ? newName : task.taskName)
+			.input("projectId", mssql.Int, task.project_Id)
+			.input("userId", mssql.Int, task.userId)
+			.input(
+				"taskDescription",
+				mssql.VarChar,
+				newDescription ? newDescription : task.taskDescription
+			)
+			.input("isCompleted", mssql.Bit, task.isCompleted)
+			.input("isSubmitted", mssql.Bit, task.isSubmitted)
+			.execute("dbo.spTasks_UpdateTask");
 		res.status(200).send({ message: `Task with id ${id} was updated` });
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
 };
-const submitComplete = async (req, res) =>
-{
+const submitAsComplete = async (req, res) => {
 	try {
-		
+		const { id } = req.param;
+		const pool = await mssql.connect(sqlConfig);
+		await pool
+			.request()
+			.input("id", mssql.Int, id)
+			.execute("dbo.spTasks_SubmitCompleteTask");
+		res.status(200).send({ message: `Task with id ${id} marked as complete` });
 	} catch (error) {
-		
+		res.status(500).send({ message: error.message });
 	}
-}
+};
 
-module.exports = { getAllTasks, getTaskById, assignTask, deleteTask, updateTask, submitComplete, addTask };
+module.exports = {
+	getAllTasks,
+	getTaskById,
+	assignTask,
+	deleteTask,
+	updateTask,
+	submitAsComplete,
+	addTask,
+};

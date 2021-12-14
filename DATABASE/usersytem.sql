@@ -148,3 +148,5 @@ select * from dbo.usersProjects
 
 delete from dbo.users where userId = 4
 
+update dbo.users
+    set RoleId = 1 where userId =7

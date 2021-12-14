@@ -66,7 +66,8 @@
 --     END
 -- exec dbo.spUsers_DeleteUser 'dancanmilgo73@gmail.com'
 --------------------------------------Add Project------------------
--- alter procedure dbo.spUsers_AddProject
+-- drop PROCEDURE if exists dbo.spUsers_AddProject
+-- create procedure dbo.spProjects_AddProject
 --     @name varchar(50),
 --     @description varchar(300) = null
 -- AS
@@ -75,7 +76,7 @@
 -- END
 
 
--- exec dbo.spUsers_AddProject 'ABCd'
+-- exec dbo.spProjects_AddProject 'Bitcoin Website'
 -- select * from dbo.projects
 
 ------------------------------------------------update project Details----------------------
@@ -154,24 +155,72 @@
 -- exec dbo.spTasks_AddTask 'Ui', 7, 'create the UI'
 
 
-
+ 
 -- -------------------------////assign a task/////--------------
 -- drop PROCEDURE if EXISTS dbo.spTasks_AssignTask;
-CREATE PROCEDURE dbo.spTasks_AssignTask
-    @taskId int,
-    @userId INT
-    AS
-    BEGIN
-    set NOCOUNT on;
-        declare @project_Id int;
-        set @project_Id= (select project_Id from dbo.tasks t where t.taskId = @taskId);
-        update dbo.users
-            set projectId = @project_Id
-             where userId = @userId and projectId is NULL;
-        UPDATE dbo.tasks
-            set userId = @userId
-        where taskId = @taskId;
-    END
+-- CREATE PROCEDURE dbo.spTasks_AssignTask
+--     @taskId int,
+--     @userId INT
+--     AS
+--     BEGIN
+--     set NOCOUNT on;
+--         declare @project_Id int;
+--         set @project_Id= (select project_Id from dbo.tasks t where t.taskId = @taskId);
+--         update dbo.users
+--             set projectId = @project_Id
+--              where userId = @userId and projectId is NULL;
+--         UPDATE dbo.tasks
+--             set userId = @userId
+--         where taskId = @taskId;
+--     END
 
-exec dbo.spTasks_AssignTask 2,5
-   
+-- exec dbo.spTasks_AssignTask 2,5
+-- ---------------------------/////Delete a task//////------------
+-- select * from dbo.tasks
+-- CREATE PROCEDURE dbo.spTasks_DeleteTask
+--     @id INT
+--     AS
+--     BEGIN
+--         update dbo.tasks
+--         set isDeleted = 1 where taskId = 3
+--     END
+
+-- exec dbo.spTasks_DeleteTask 3
+
+-- /-----------/////update task///////-----------------------
+-- drop PROCEDURE if exists dbo.spTasks_UpdateTask
+-- CREATE PROCEDURE dbo.spTasks_UpdateTask
+-- @id int,
+-- @name VARCHAR(50),
+-- @projectId int,
+-- @userId int,
+-- @taskDescription VARCHAR(500),
+-- @isCompleted bit,
+-- @isSubmitted BIT
+-- AS
+-- BEGIN
+--     update dbo.tasks
+--         set taskName = @name,
+--             project_Id =@projectId,
+--             userId = @userId,
+--             taskDescription = @taskDescription,
+--             isCompleted = @isCompleted,
+--             isSubmitted = @isSubmitted
+--         where taskId = @id
+-- END
+
+-- exec  dbo.spTasks_UpdateTask 2, 'UI', 3,5,'Design the UI and use redux for state management', NULL, 0
+
+
+-- -----------------------------------//////Submit Task as Complete/////--------------------------
+-- DROP PROCEDURE if exists dbo.spTasks_SubmitCompleteTask
+-- create PROCEDURE dbo.spTasks_SubmitCompleteTask
+--     @id INT
+--     AS
+--     BEGIN
+--         update dbo.tasks
+--             set isSubmitted = 1
+--         where taskId = @id
+--     END
+
+-- exec dbo.spTasks_SubmitCompleteTask 3
