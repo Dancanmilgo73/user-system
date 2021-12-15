@@ -1,6 +1,9 @@
 import axios from "axios";
 import { projectsTasksRequest } from "../../Api";
 import {
+	ADD_PROJECT_SUCCESS,
+	ADD_TASK_FAIL,
+	ADD_TASK_REQUEST,
 	ASSIGN_TASK_FAIL,
 	ASSIGN_TASK_REQUEST,
 	ASSIGN_TASK_SUCCESS,
@@ -23,17 +26,35 @@ export const getTasks = () => async (dispatch) => {
 	}
 };
 
-export const assignTask = (data) => async (dispatch) => {
+export const assignTask = (input) => async (dispatch) => {
 	try {
 		dispatch({ type: ASSIGN_TASK_REQUEST });
-		const { data } = await projectsTasksRequest.post("/tasks/assign", data, {
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
-			},
-		});
+		const { data } = await projectsTasksRequest.post(
+			`/tasks/assign${input.taskId}`,
+			{ userId: input.userId },
+			{
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
+				},
+			}
+		);
 		console.log(data);
 		dispatch({ type: ASSIGN_TASK_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({ type: ASSIGN_TASK_FAIL, payload: error.response.data.message });
+	}
+};
+
+export const addTask = (input) => async (dispatch) => {
+	try {
+		dispatch({ type: ADD_TASK_REQUEST });
+		const { data } = await projectsTasksRequest.post("/tasks", input, {
+			headers: {
+				Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
+			},
+		});
+		dispatch({ type: ADD_PROJECT_SUCCESS, payload: data });
+	} catch (error) {
+		dispatch({ type: ADD_TASK_FAIL, payload: error.response.data.message });
 	}
 };

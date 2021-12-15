@@ -93,6 +93,7 @@ export default function SignIn() {
 							name='email'
 							autoComplete='email'
 							autoFocus
+							type='email'
 						/>
 						<TextField
 							margin='normal'

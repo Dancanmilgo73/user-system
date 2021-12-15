@@ -16,8 +16,10 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "../redux/actions/projects.actions";
 import Button from "@mui/material/Button";
-import { assignTask, getTasks } from "../redux/actions/tasks.action";
+import { addTask, assignTask, getTasks } from "../redux/actions/tasks.action";
 import CreateProject from "./CreateProject";
+import CreateTask from "./CreateTask";
+import AssignTask from "./AssignTask";
 
 function createData(name, calories, fat, carbs, protein, price) {
 	return {
@@ -101,15 +103,25 @@ function Row(props) {
 											<TableCell>UnAssigned</TableCell>
 											<TableCell align='right'>{task.description}</TableCell>
 											<TableCell align='right'>
-												<Button variant='contained'>Assign</Button>
+												{/* <Button variant='outlined'>Assign</Button> */}
+												<AssignTask />
 											</TableCell>
 										</TableRow>
 									))}
+									{/* <Button
+										variant='outlined'
+										sx={{
+											mt: 2,
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+										}}
+										onClick={() => dispatch(addTask())}>
+										Create New Task
+									</Button> */}
+									<CreateTask projectId={project.id} />
 								</TableBody>
 							</Table>
-							<Button variant='contained' align='right' onClick={()=>dispatch(assignTask())}>
-								Create New Task
-							</Button>
 						</Box>
 					</Collapse>
 				</TableCell>
