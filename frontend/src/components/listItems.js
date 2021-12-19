@@ -70,7 +70,7 @@ export const secondaryListItems = (
 		</ListItem>
 	</div>
 );
-export default function SideBar({toggleButton}) {
+export default function SideBar({ toggleButton }) {
 	return (
 		<div>
 			{/* <ListItem button>
@@ -79,23 +79,23 @@ export default function SideBar({toggleButton}) {
 			</ListItemIcon>
 			<ListItemText primary='Dashboard' />
 		</ListItem> */}
-			<ListItem button onClick={()=> toggleButton('projects')}>
+			<ListItem button onClick={() => toggleButton("projects")}>
 				<ListItemIcon>
 					<BarChartIcon />
 				</ListItemIcon>
 				<ListItemText primary='Projects' />
 			</ListItem>
-			<ListItem button onClick={ () => toggleButton('users') }>
+			<ListItem button onClick={() => toggleButton("users")}>
 				<ListItemIcon>
 					<PeopleIcon />
 				</ListItemIcon>
 				<ListItemText primary='Users' />
 			</ListItem>
-			<ListItem button onClick={ () => toggleButton('tasks') }>
+			<ListItem button onClick={() => toggleButton("tasks")}>
 				<ListItemIcon>
 					<TaskIcon />
 				</ListItemIcon>
-				<ListItemText primary='Tasks' />
+				<ListItemText primary='Settings' />
 			</ListItem>
 			{/* <ListItem button>
 			<ListItemIcon>

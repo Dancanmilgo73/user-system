@@ -6,16 +6,17 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
-
+import { useSelector } from "react-redux";
 export default function UsersList() {
 	const [checked, setChecked] = React.useState([1]);
+	const { users, loading } = useSelector((state) => state.users);
 
-	const handleToggle = (value) => () => {
-		const currentIndex = checked.indexOf(value);
+	const handleToggle = (user) => () => {
+		const currentIndex = checked.indexOf(user);
 		const newChecked = [...checked];
 
 		if (currentIndex === -1) {
-			newChecked.push(value);
+			newChecked.push(user);
 		} else {
 			newChecked.splice(currentIndex, 1);
 		}
@@ -24,19 +25,17 @@ export default function UsersList() {
 	};
 
 	return (
-		<List
-			dense
-			sx={{ width: "100%", bgcolor: "background.paper" }}>
-			{[0, 1, 2, 3].map((value) => {
-				const labelId = `checkbox-list-secondary-label-${value}`;
+		<List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
+			{users.map((user) => {
+				const labelId = `checkbox-list-secondary-label-${user}`;
 				return (
 					<ListItem
-						key={value}
+						key={user}
 						secondaryAction={
 							<Checkbox
 								edge='end'
-								onChange={handleToggle(value)}
-								checked={checked.indexOf(value) !== -1}
+								onChange={handleToggle(user)}
+								checked={checked.indexOf(user) !== -1}
 								inputProps={{ "aria-labelledby": labelId }}
 							/>
 						}
@@ -44,11 +43,11 @@ export default function UsersList() {
 						<ListItemButton>
 							<ListItemAvatar>
 								<Avatar
-									alt={`Avatar n°${value + 1}`}
-									src={`/static/images/avatar/${value + 1}.jpg`}
+									alt={`Avatar n°${user + 1}`}
+									// src={`/static/images/avatar/${user + 1}.jpg`}
 								/>
 							</ListItemAvatar>
-							<ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+							<ListItemText id={labelId} primary={user.username} />
 						</ListItemButton>
 					</ListItem>
 				);

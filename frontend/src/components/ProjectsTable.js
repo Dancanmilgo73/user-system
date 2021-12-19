@@ -78,33 +78,40 @@ function Row(props) {
 				{/* <TableCell align='right'>{row.protein}</TableCell> */}
 			</TableRow>
 			<TableRow>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+				<TableCell
+					style={{
+						paddingBottom: 0,
+						paddingTop: 0,
+						backgroundColor: "#deeefa",
+					}}
+					colSpan={6}>
 					<Collapse in={open} timeout='auto' unmountOnExit>
 						<Box sx={{ margin: 1 }}>
 							<Typography variant='h6' gutterBottom component='div'>
 								Tasks
+								<CreateTask projectId={project.id} />
 							</Typography>
 							<Table size='small' aria-label='purchases'>
 								<TableHead>
 									<TableRow>
 										<TableCell>Name</TableCell>
 										<TableCell>Status</TableCell>
-										<TableCell align='right'>Description</TableCell>
+										<TableCell align=''>Description</TableCell>
 										{/* <TableCell align='right'>Total price ($)</TableCell> */}
 									</TableRow>
 								</TableHead>
 								<TableBody>
 									{projectTasks.map((task) => (
-										<TableRow key={task.name}>
+										<TableRow key={task.id}>
 											<TableCell component='th' scope='row'>
 												{task.name}
 											</TableCell>
 											{/* <TableCell>{task.customerId}</TableCell> */}
 											<TableCell>UnAssigned</TableCell>
-											<TableCell align='right'>{task.description}</TableCell>
+											<TableCell align=''>{task.description}</TableCell>
 											<TableCell align='right'>
 												{/* <Button variant='outlined'>Assign</Button> */}
-												<AssignTask />
+												<AssignTask taskId={task.id} />
 											</TableCell>
 										</TableRow>
 									))}
@@ -119,7 +126,6 @@ function Row(props) {
 										onClick={() => dispatch(addTask())}>
 										Create New Task
 									</Button> */}
-									<CreateTask projectId={project.id} />
 								</TableBody>
 							</Table>
 						</Box>
@@ -160,7 +166,7 @@ export default function ProjectsTable() {
 	console.log(projects);
 	useEffect(() => {
 		dispatch(getProjects());
-	}, [dispatch, projects]);
+	}, [dispatch]);
 
 	return (
 		<>
@@ -180,7 +186,7 @@ export default function ProjectsTable() {
 					</TableHead>
 					<TableBody>
 						{projects?.map((project) => (
-							<Row key={project.name} project={project} />
+							<Row key={project.id} project={project} />
 						))}
 					</TableBody>
 				</Table>

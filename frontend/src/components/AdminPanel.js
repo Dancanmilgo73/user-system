@@ -111,6 +111,10 @@ function DashboardContent() {
 				return <ProjectsTable />;
 		}
 	};
+	const handleLogout = (e) => {
+		sessionStorage.clear();
+		document.location.reload(true);
+	};
 	return (
 		<ThemeProvider theme={mdTheme}>
 			<Box sx={{ display: "flex" }}>
@@ -139,11 +143,10 @@ function DashboardContent() {
 							sx={{ flexGrow: 1 }}>
 							Admin Dashboard
 						</Typography>
-						<IconButton  color='inherit'>
-							<Button
-								endIcon={<LogoutIcon />}
-								variant='contained'
-								>Log Out</Button>
+						<IconButton color='inherit' onClick={handleLogout}>
+							<Button endIcon={<LogoutIcon />} variant='contained'>
+								Log Out
+							</Button>
 						</IconButton>
 					</Toolbar>
 				</AppBar>

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { projectsTasksRequest } from "../../Api";
 import {
 	ADD_PROJECT_SUCCESS,
@@ -30,7 +29,7 @@ export const assignTask = (input) => async (dispatch) => {
 	try {
 		dispatch({ type: ASSIGN_TASK_REQUEST });
 		const { data } = await projectsTasksRequest.post(
-			`/tasks/assign${input.taskId}`,
+			`/tasks/assign/${input.taskId}`,
 			{ userId: input.userId },
 			{
 				headers: {

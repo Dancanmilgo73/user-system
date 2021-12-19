@@ -37,8 +37,11 @@ export default function CreateTask({ projectId }) {
 		setOpen(false);
 	};
 	return (
-		<div>
-			<Button variant='outlined' sx={{ mt: 2 }} onClick={handleClickOpen}>
+		<div style={{ display: "flex", justifyContent: "center" }}>
+			<Button
+				variant='outlined'
+				sx={{ mt: 2, width: "30%" }}
+				onClick={handleClickOpen}>
 				CREATE TASK
 			</Button>
 			<Dialog open={open} onClose={handleClose}>

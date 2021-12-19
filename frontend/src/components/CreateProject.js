@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
-import { addProject } from "../redux/actions/projects.actions";
+import { addProject, getProjects } from "../redux/actions/projects.actions";
 // import TextField from "@mui/material/TextField";
 import { useSelector, useDispatch } from "react-redux";
 export default function CreateProject() {
@@ -32,10 +32,11 @@ export default function CreateProject() {
 		// console.log(projectDetails);
 		dispatch(addProject(projectDetails));
 		setOpen(false);
+		dispatch(getProjects());
 	};
 	return (
 		<div>
-			<Button variant='contained' sx={ {mb: 2}} onClick={handleClickOpen}>
+			<Button variant='contained' sx={{ mb: 2 }} onClick={handleClickOpen}>
 				ADD PROJECT
 			</Button>
 			<Dialog open={open} onClose={handleClose}>
