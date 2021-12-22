@@ -15,6 +15,8 @@ const getAllTasks = async (req, res) => {
 				description: task.taskDescription,
 				projectId: task.project_Id,
 				userId: task.userId,
+				isCompleted: task.isCompleted,
+				isSubmitted: task.isSubmitted,
 			};
 		});
 		res.status(200).json(tasks);
@@ -44,17 +46,16 @@ const getTaskById = async (req, res) => {
 };
 const assignTask = async (req, res) => {
 	try {
-		const { id } = req.params;
-		const { userId } = req.body;
+		const { userId, id } = req.body;
 		const pool = await mssql.connect(sqlConfig);
 		const data = await pool
 			.request()
 			.input("taskId", mssql.Int, id)
 			.input("userId", mssql.Int, userId)
 			.execute("dbo.spTasks_AssignTask");
-		res
-			.status(200)
-			.send({ message: `Task asingned to the user with the id of ${userId}: ${data}` });
+		res.status(200).send({
+			message: `Task asingned to the user with the id of ${userId}: ${data}`,
+		});
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
@@ -76,7 +77,7 @@ const addTask = async (req, res) => {
 };
 const deleteTask = async (req, res) => {
 	try {
-		const { id } = req.param;
+		const { id } = req.params;
 		const pool = await mssql.connect(sqlConfig);
 		const data = await pool
 			.request()
@@ -128,14 +129,24 @@ const updateTask = async (req, res) => {
 	}
 };
 const submitAsComplete = async (req, res) => {
+	const { id } = req.params;
+	console.log(id);
 	try {
-		const { id } = req.param;
 		const pool = await mssql.connect(sqlConfig);
 		await pool
 			.request()
 			.input("id", mssql.Int, id)
 			.execute("dbo.spTasks_SubmitCompleteTask");
 		res.status(200).send({ message: `Task with id ${id} marked as complete` });
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+};
+const sendEmailOnAssignedTask = async (req, res) => {
+	try {
+		const pool = await mssql.connect(sqlConfig);
+		const data = await pool.request().execute("dbo.spTasks_SendEmailTaskAlert");
+		res.status(200).send(data.recordset);
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
@@ -149,4 +160,5 @@ module.exports = {
 	updateTask,
 	submitAsComplete,
 	addTask,
+	sendEmailOnAssignedTask,
 };

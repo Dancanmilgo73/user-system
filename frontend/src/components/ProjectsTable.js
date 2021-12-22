@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,15 +8,21 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "../redux/actions/projects.actions";
 import Button from "@mui/material/Button";
-import { addTask, assignTask, getTasks } from "../redux/actions/tasks.action";
+import {
+	addTask,
+	assignTask,
+	deleteTask,
+	getTasks,
+} from "../redux/actions/tasks.action";
 import CreateProject from "./CreateProject";
 import CreateTask from "./CreateTask";
 import AssignTask from "./AssignTask";
+import DeleteIcon from "@mui/icons-material/Delete";
+import TaskList from "./TasksList";
 
 function createData(name, calories, fat, carbs, protein, price) {
 	return {
@@ -42,98 +45,6 @@ function createData(name, calories, fat, carbs, protein, price) {
 			},
 		],
 	};
-}
-
-function Row(props) {
-	const dispatch = useDispatch();
-
-	const { project } = props;
-	useEffect(() => {
-		dispatch(getTasks());
-	}, [dispatch, project]);
-	const { tasks } = useSelector((state) => state.tasks);
-	const projectTasks = tasks.filter((task) => task.projectId === project.id);
-	const [open, setOpen] = React.useState(false);
-	// console.log(projectTasks);
-
-	return (
-		<React.Fragment>
-			<TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-				<TableCell>
-					<IconButton
-						aria-label='expand row'
-						size='small'
-						onClick={() => setOpen(!open)}>
-						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-					</IconButton>
-				</TableCell>
-				<TableCell component='th' scope='row'>
-					{project.name}
-				</TableCell>
-				<TableCell align='right'>Completed</TableCell>
-				<TableCell align='right' style={{}}>
-					{project.description}
-				</TableCell>
-				{/* <TableCell align='right'>{row.carbs}</TableCell> */}
-				{/* <TableCell align='right'>{row.protein}</TableCell> */}
-			</TableRow>
-			<TableRow>
-				<TableCell
-					style={{
-						paddingBottom: 0,
-						paddingTop: 0,
-						backgroundColor: "#deeefa",
-					}}
-					colSpan={6}>
-					<Collapse in={open} timeout='auto' unmountOnExit>
-						<Box sx={{ margin: 1 }}>
-							<Typography variant='h6' gutterBottom component='div'>
-								Tasks
-								<CreateTask projectId={project.id} />
-							</Typography>
-							<Table size='small' aria-label='purchases'>
-								<TableHead>
-									<TableRow>
-										<TableCell>Name</TableCell>
-										<TableCell>Status</TableCell>
-										<TableCell align=''>Description</TableCell>
-										{/* <TableCell align='right'>Total price ($)</TableCell> */}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{projectTasks.map((task) => (
-										<TableRow key={task.id}>
-											<TableCell component='th' scope='row'>
-												{task.name}
-											</TableCell>
-											{/* <TableCell>{task.customerId}</TableCell> */}
-											<TableCell>UnAssigned</TableCell>
-											<TableCell align=''>{task.description}</TableCell>
-											<TableCell align='right'>
-												{/* <Button variant='outlined'>Assign</Button> */}
-												<AssignTask taskId={task.id} />
-											</TableCell>
-										</TableRow>
-									))}
-									{/* <Button
-										variant='outlined'
-										sx={{
-											mt: 2,
-											display: "flex",
-											justifyContent: "center",
-											alignItems: "center",
-										}}
-										onClick={() => dispatch(addTask())}>
-										Create New Task
-									</Button> */}
-								</TableBody>
-							</Table>
-						</Box>
-					</Collapse>
-				</TableCell>
-			</TableRow>
-		</React.Fragment>
-	);
 }
 
 // Row.propTypes = {
@@ -186,7 +97,17 @@ export default function ProjectsTable() {
 					</TableHead>
 					<TableBody>
 						{projects?.map((project) => (
-							<Row key={project.id} project={project} />
+							// <TaskList key={project.id} project={project} />
+							<TableRow>
+								<TableCell />
+								<TableCell>{project.name}</TableCell>
+								<TableCell align='right'>In Progress</TableCell>
+								<TableCell align='right'>{project.id}</TableCell>
+								<TableCell align='right'>
+									<Button variant='outlined'>View Tasks</Button>
+								</TableCell>
+								{/* <TableCell align='right'>Protein&nbsp;(g)</TableCell> */}
+							</TableRow>
 						))}
 					</TableBody>
 				</Table>

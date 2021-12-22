@@ -21,12 +21,14 @@ import SideBar, { mainListItems, secondaryListItems } from "./listItems";
 import ProjectsTable from "./ProjectsTable";
 import UsersList from "./UsersList";
 import TasksTable from "./TasksList";
-import LogoutIcon from "@mui/icons-material/Logout";
 import Button from "@mui/material/Button";
+import { useSelector } from "react-redux";
 
 // import Chart from "./Chart";
 // import Deposits from "./Deposits";
 // import Orders from "./Orders";
+import LogoutIcon from "@mui/icons-material/Logout";
+import UserDashboard from "./UserDashboard";
 function Copyright(props) {
 	return (
 		<Typography
@@ -94,21 +96,21 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
 	const [open, setOpen] = React.useState(true);
+	const { userDetails } = useSelector((state) => state.auth);
+
 	const toggleDrawer = () => {
 		setOpen(!open);
 	};
-	const [activeButton, setActiveButton] = React.useState("projects");
+	const [activeButton, setActiveButton] = React.useState("dashboard");
 	const toggleActiveButton = (button) => {
 		setActiveButton(button);
 	};
 	const tableContent = (activeButton) => {
 		switch (activeButton) {
-			case "users":
-				return <UsersList />;
 			case "settings":
-				return <TasksTable />;
+				return <>welcome to settings</>;
 			default:
-				return <ProjectsTable />;
+				return <UserDashboard />;
 		}
 	};
 	const handleLogout = (e) => {
@@ -141,7 +143,7 @@ function DashboardContent() {
 							color='inherit'
 							noWrap
 							sx={{ flexGrow: 1 }}>
-							Admin Dashboard
+							{userDetails.name}
 						</Typography>
 						<IconButton color='inherit' onClick={handleLogout}>
 							<Button endIcon={<LogoutIcon />} variant='contained'>
@@ -195,6 +197,6 @@ function DashboardContent() {
 	);
 }
 
-export default function AdminDashboard() {
+export default function UserPanel() {
 	return <DashboardContent />;
 }

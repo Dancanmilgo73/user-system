@@ -1,11 +1,21 @@
-import { LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS } from "../actionTypes";
+import {
+	LOGIN_FAIL,
+	LOGIN_REQUEST,
+	LOGIN_SUCCESS,
+	SIGNUP_FAIL,
+	SIGNUP_REQUEST,
+	SIGNUP_SUCCESS,
+} from "../actionTypes";
 
 const initialState = {
 	token: sessionStorage.getItem("stored-token")
 		? sessionStorage.getItem("stored-token")
 		: null,
 	loading: false,
-	response: null,
+	error: null,
+	userDetails: sessionStorage.getItem("stored-user")
+		? JSON.parse(sessionStorage.getItem("stored-user"))
+		: null,
 };
 
 export const authReducer = (state = initialState, { type, payload }) => {
@@ -15,17 +25,36 @@ export const authReducer = (state = initialState, { type, payload }) => {
 				...state,
 				loading: true,
 			};
+		case SIGNUP_REQUEST:
+			return {
+				...state,
+				loading: true,
+			};
 		case LOGIN_SUCCESS:
 			return {
 				...state,
 				loading: false,
-				token: payload,
+				token: payload.accessToken,
+				userDetails: payload.userDetails,
+			};
+		case SIGNUP_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				token: payload.accessToken,
+				userDetails: payload.userDetails,
 			};
 		case LOGIN_FAIL:
 			return {
 				...state,
 				loading: false,
-				response: payload,
+				error: payload,
+			};
+		case SIGNUP_FAIL:
+			return {
+				...state,
+				laoding: false,
+				error: payload,
 			};
 		default:
 			return state;

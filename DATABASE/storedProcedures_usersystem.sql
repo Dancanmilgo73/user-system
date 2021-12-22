@@ -162,9 +162,9 @@
 --     @taskId int,
 --     @userId INT
 --     AS
+--         declare @project_Id int;
 --     BEGIN
 --     set NOCOUNT on;
---         declare @project_Id int;
 --         set @project_Id= (select project_Id from dbo.tasks t where t.taskId = @taskId);
 --         update dbo.users
 --             set projectId = @project_Id
@@ -177,15 +177,15 @@
 -- exec dbo.spTasks_AssignTask 2,5
 -- ---------------------------/////Delete a task//////------------
 -- select * from dbo.tasks
--- CREATE PROCEDURE dbo.spTasks_DeleteTask
---     @id INT
---     AS
---     BEGIN
---         update dbo.tasks
---         set isDeleted = 1 where taskId = 3
---     END
+alter PROCEDURE dbo.spTasks_DeleteTask
+    @id INT
+    AS
+    BEGIN
+        update dbo.tasks
+        set isDeleted = 1 where taskId = @id and userId is null
+    END
 
--- exec dbo.spTasks_DeleteTask 3
+exec dbo.spTasks_DeleteTask 3
 
 -- /-----------/////update task///////-----------------------
 -- drop PROCEDURE if exists dbo.spTasks_UpdateTask
@@ -224,3 +224,33 @@
 --     END
 
 -- exec dbo.spTasks_SubmitCompleteTask 3
+
+--------------------------------------- Send emails when a user  is assigned a task
+alter procedure dbo.spTasks_SendEmailTaskAlert
+AS
+BEGIN
+select dbo.users.userId, dbo.users.username, dbo.users.email, dbo.tasks.taskName,dbo.tasks.taskDescription,
+dbo.projects.projectId, dbo.projects.projectName,  dbo.tasks.emailSent
+ from dbo.users inner join dbo.tasks on dbo.tasks.userId = dbo.users.userId 
+inner join dbo.projects on dbo.projects.projectId = dbo.tasks.project_Id WHERE dbo.users.emailSent = 1 and dbo.tasks.emailSent = 0;
+update dbo.tasks
+    set emailSent = 1
+END
+
+-- exec  dbo.spTasks_SendEmailTaskAlert
+exec dbo.spUsers_GetAllUsers
+
+-- ----------------------------------Send Email when a user registers-------------------------
+-- CREATE PROCEDURE dbo.spUsers_sendEmailOnRegister
+-- AS
+-- BEGIN
+--     select * from dbo.users where emailSent = 0;
+    update dbo.users
+        set emailSent = 0 where userId = 38
+-- END
+
+-- exec dbo.spUsers_sendEmailOnRegister
+
+
+update dbo.tasks
+ set emailSent = 0 where userId =37

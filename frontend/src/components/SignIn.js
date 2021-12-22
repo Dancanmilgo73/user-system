@@ -22,6 +22,9 @@ import {
 	Navigate,
 } from "react-router-dom";
 import Spinner from "./Spinner";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Stack from "@mui/material/Stack";
 function Copyright(props) {
 	return (
 		<Typography
@@ -43,9 +46,9 @@ const theme = createTheme();
 
 export default function SignIn() {
 	const dispatch = useDispatch();
-	const { token, loading } = useSelector((state) => state.auth);
+	const { token, loading, error } = useSelector((state) => state.auth);
 	console.log(token);
-	if (token !== null) return <Navigate to='dashboard' />;
+	if (token !== null) return <Navigate to='/dashboard' />;
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
@@ -79,6 +82,14 @@ export default function SignIn() {
 					<Typography component='h1' variant='h5'>
 						Sign in
 					</Typography>
+					{error && (
+						<Stack sx={{ width: "100%" }} spacing={2}>
+							<Alert severity='error'>
+								<AlertTitle>Error</AlertTitle>
+								<strong>{error}</strong>
+							</Alert>
+						</Stack>
+					)}
 					<Box
 						component='form'
 						onSubmit={handleSubmit}
@@ -105,10 +116,10 @@ export default function SignIn() {
 							id='password'
 							autoComplete='current-password'
 						/>
-						<FormControlLabel
+						{/* <FormControlLabel
 							control={<Checkbox value='remember' color='primary' />}
 							label='Remember me'
-						/>
+						/> */}
 						<Button
 							type='submit'
 							fullWidth

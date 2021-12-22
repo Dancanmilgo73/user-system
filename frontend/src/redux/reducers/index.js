@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { authReducer } from "./auth.reducer";
+import { authReducer, registerReducer } from "./auth.reducer";
 import { projectsReducer } from "./projects.reducer";
 import { tasksReducer } from "./tasks.reducer";
 import { usersReducer } from "./users.reducer";

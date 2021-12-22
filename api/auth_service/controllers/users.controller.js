@@ -4,28 +4,12 @@ const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 const { sqlConfig } = require("../db/config");
 
-const registerUser = async (req, res) => {
-	function checkPasswordStrength(password) {
-		const checkForLength = new RegExp("^(?=.{8,})");
-		const checkForSymbols = new RegExp("^(?=.*[!@#$%^&*])");
-		const checkForCapsLettersNumbers = new RegExp(
-			"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])"
-		);
-		if (!checkForLength.test(password))
-			res
-				.status(401)
-				.send({ message: "Password must be atleast 8 characters long " });
-
-		if (!checkForSymbols.test(password))
-			res
-				.status(401)
-				.send({ message: "Password must contain atleast 1 symbol" });
-
-		if (!checkForCapsLettersNumbers.test(password))
-			res.status(401).send({
-				message: "Password must contain small, letters caps and numbers",
-			});
-	}
+const registerUser = async (req, res, next) => {
+	const checkForLength = new RegExp("^(?=.{8,})");
+	const checkForSymbols = new RegExp("^(?=.*[!@#$%^&*])");
+	const checkForCapsLettersNumbers = new RegExp(
+		"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])"
+	);
 
 	try {
 		const { email, username, password, confirmPassword } = req.body;
@@ -34,7 +18,20 @@ const registerUser = async (req, res) => {
 
 		if (password !== confirmPassword)
 			return res.status(401).send({ message: "Confirm password do not match" });
-		checkPasswordStrength(password);
+		if (!checkForLength.test(password))
+			return res
+				.status(401)
+				.send({ message: "Password must be atleast 8 characters long " });
+
+		if (!checkForSymbols.test(password))
+			return res
+				.status(401)
+				.send({ message: "Password must contain atleast 1 symbol" });
+
+		if (!checkForCapsLettersNumbers.test(password))
+			return res.status(401).send({
+				message: "Password must contain small, letters caps and numbers",
+			});
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const user = { email, name: username, password: hashedPassword };
 		// console.log(user);
@@ -46,9 +43,10 @@ const registerUser = async (req, res) => {
 			.input("password", mssql.VarChar, user.password)
 			.execute("dbo.spUsers_AddUser");
 		//   .catch(err=> res.status(401).send({message: "email already in use"}));
-		return res.status(201).send({ message: "User was added" });
+		// res.status(201).send({ message: "User was added" });
+		next();
 	} catch (err) {
-		return res.status(500).send({ message: err.message });
+		res.status(500).send({ message: err.message });
 	}
 };
 
@@ -78,7 +76,15 @@ const loginUser = async (req, res) => {
 				process.env.SECRET_KEY,
 				{ expiresIn: "1h" }
 			);
-			return res.json({ accessToken: token });
+			return res.json({
+				accessToken: token,
+				user: {
+					name: user.username,
+					roleId: user.RoleId,
+					id: user.userId,
+					projectId: user.projectId,
+				},
+			});
 		});
 	} catch (error) {
 		return res.status(500).send({ message: error.message });
@@ -157,4 +163,22 @@ const getAllUsers = async (req, res) => {
 		res.status(500).send({ message: error.message });
 	}
 };
-module.exports = { registerUser, loginUser, updateUser, deleteUser, getAllUsers};
+const sendEmailOnRegister = async (req, res) => {
+	try {
+		const pool = await mssql.connect(sqlConfig);
+		const data = await pool
+			.request()
+			.execute("dbo.spUsers_sendEmailOnRegister");
+		res.status(200).json(data.recordset);
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+};
+module.exports = {
+	registerUser,
+	loginUser,
+	updateUser,
+	deleteUser,
+	getAllUsers,
+	sendEmailOnRegister,
+};

@@ -14,10 +14,18 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
 	BrowserRouter as Router,
+	Navigate,
 	Routes,
 	Route,
 	Link as RouterLink,
+	useNavigate,
 } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Stack from "@mui/material/Stack";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../redux/actions/auth.actions";
+import Spinner from "./Spinner";
 
 function Copyright(props) {
 	return (
@@ -39,20 +47,32 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { loading, error, token } = useSelector((state) => state.auth);
+	if (token !== null) navigate("/dashboard");
+
+	console.log(error);
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
 		// eslint-disable-next-line no-console
-		console.log({
+		const registerDetails = {
 			email: data.get("email"),
+			username: data.get("userName"),
 			password: data.get("password"),
-		});
+			confirmPassword: data.get("confirmPassword"),
+		};
+		dispatch(registerUser(registerDetails));
 	};
 
-	return (
+	return loading ? (
+		<Spinner />
+	) : (
 		<ThemeProvider theme={theme}>
 			<Container component='main' maxWidth='xs'>
 				<CssBaseline />
+
 				<Box
 					sx={{
 						marginTop: 8,
@@ -66,24 +86,32 @@ export default function SignUp() {
 					<Typography component='h1' variant='h5'>
 						Sign up
 					</Typography>
+					{error && (
+						<Stack sx={{ width: "100%" }} spacing={2}>
+							<Alert severity='error'>
+								<AlertTitle>Error</AlertTitle>
+								<strong>{error}</strong>
+							</Alert>
+						</Stack>
+					)}
 					<Box
 						component='form'
 						noValidate
 						onSubmit={handleSubmit}
 						sx={{ mt: 3 }}>
 						<Grid container spacing={2}>
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12}>
 								<TextField
 									autoComplete='given-name'
-									name='firstName'
+									name='userName'
 									required
 									fullWidth
-									id='firstName'
-									label='First Name'
+									id='userName'
+									label='User Name'
 									autoFocus
 								/>
 							</Grid>
-							<Grid item xs={12} sm={6}>
+							{/* <Grid item xs={12} sm={6}>
 								<TextField
 									required
 									fullWidth
@@ -92,7 +120,7 @@ export default function SignUp() {
 									name='lastName'
 									autoComplete='family-name'
 								/>
-							</Grid>
+							</Grid> */}
 							<Grid item xs={12}>
 								<TextField
 									required
@@ -115,13 +143,24 @@ export default function SignUp() {
 								/>
 							</Grid>
 							<Grid item xs={12}>
+								<TextField
+									required
+									fullWidth
+									name='confirmPassword'
+									label='Confirm Password'
+									type='password'
+									id='confirmPassword'
+									autoComplete='new-password'
+								/>
+							</Grid>
+							{/* <Grid item xs={12}>
 								<FormControlLabel
 									control={
 										<Checkbox value='allowExtraEmails' color='primary' />
 									}
 									label='I want to receive project updates via email.'
 								/>
-							</Grid>
+							</Grid> */}
 						</Grid>
 						<Button
 							type='submit'

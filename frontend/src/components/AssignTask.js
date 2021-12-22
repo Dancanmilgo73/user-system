@@ -14,13 +14,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from "../redux/actions/users.actions";
 import { assignTask } from "../redux/actions/tasks.action";
 
-export default function AssignTask(taskId) {
+export default function AssignTask({ task }) {
+	// console.log(task);
 	const [open, setOpen] = React.useState(false);
 	const [userId, setUserId] = React.useState("");
 	const dispatch = useDispatch();
 	const { users, loading } = useSelector((state) => state.users);
-	const availableDevs = users.filter((user) => user.projectId === null);
-	console.log(availableDevs);
+	const availableDevs = users.filter(
+		(user) => user.projectId === null || user.projectId === task.projectId
+	);
+	// console.log(availableDevs);
 	useEffect(() => {
 		dispatch(getAllUsers());
 	}, [dispatch]);
@@ -40,14 +43,16 @@ export default function AssignTask(taskId) {
 	};
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		// console.log({ taskId: taskId.taskId, userId: userId });
-		dispatch(assignTask({ taskId: taskId.taskId, userId: userId }));
+		console.log({ taskId: task.id, userId: userId });
+		dispatch(assignTask({ taskId: task.id, userId: userId }));
 		dispatch(getAllUsers());
 		setOpen(false);
 	};
 	return (
 		<div>
-			<Button onClick={handleClickOpen}>Assign Task</Button>
+			<Button onClick={handleClickOpen} variant='outlined' fullWidth>
+				Assign Task
+			</Button>
 			<Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
 				<DialogTitle>Select from the list of available developers</DialogTitle>
 				<DialogContent>

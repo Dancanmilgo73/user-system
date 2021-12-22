@@ -86,7 +86,7 @@ SELECT * from dbo.tasks;
 select * from dbo.projects
 delete from dbo.tasks where taskId = 1
 
-
+delete from dbo.users where userId = 37
 
 
 
@@ -128,12 +128,14 @@ ALTER TABLE dbo.usersProjects
 alter table dbo.users
     add isDeleted bit not null default 0
 
-
+alter table dbo.users
+    add emailSent bit not null default 0
 select * from dbo.users
 
 -- ////projects
 alter table dbo.projects
     add isDeleted bit not null default 0
+
 
 
 select * from dbo.projects
@@ -142,11 +144,17 @@ select * from dbo.projects
 alter table dbo.tasks 
     add isDeleted bit not null default 0
 
+
+alter table dbo.tasks
+ add emailSent bit not null default 0
+
 select * from dbo.tasks
 
 select * from dbo.usersProjects
 
-delete from dbo.users where userId = 4
+delete from dbo.users where userId = 
 
 update dbo.users
     set RoleId = 1 where userId =7
+update dbo.tasks
+ set emailSent = 0

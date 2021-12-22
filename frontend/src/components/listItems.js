@@ -11,7 +11,7 @@ import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import TaskIcon from "@mui/icons-material/Task";
 import List from "@mui/material/List";
-
+import { useSelector } from "react-redux";
 const mainListItems = (
 	<div>
 		{/* <ListItem button>
@@ -71,32 +71,47 @@ export const secondaryListItems = (
 	</div>
 );
 export default function SideBar({ toggleButton }) {
+	const { userDetails } = useSelector((state) => state.auth);
+
 	return (
 		<div>
-			{/* <ListItem button>
-			<ListItemIcon>
-				<DashboardIcon />
-			</ListItemIcon>
-			<ListItemText primary='Dashboard' />
-		</ListItem> */}
-			<ListItem button onClick={() => toggleButton("projects")}>
-				<ListItemIcon>
-					<BarChartIcon />
-				</ListItemIcon>
-				<ListItemText primary='Projects' />
-			</ListItem>
-			<ListItem button onClick={() => toggleButton("users")}>
-				<ListItemIcon>
-					<PeopleIcon />
-				</ListItemIcon>
-				<ListItemText primary='Users' />
-			</ListItem>
-			<ListItem button onClick={() => toggleButton("tasks")}>
-				<ListItemIcon>
-					<TaskIcon />
-				</ListItemIcon>
-				<ListItemText primary='Settings' />
-			</ListItem>
+			{userDetails.roleId === 1 ? (
+				<>
+					<ListItem button onClick={() => toggleButton("projects")}>
+						<ListItemIcon>
+							<BarChartIcon />
+						</ListItemIcon>
+						<ListItemText primary='Projects' />
+					</ListItem>
+					<ListItem button onClick={() => toggleButton("users")}>
+						<ListItemIcon>
+							<PeopleIcon />
+						</ListItemIcon>
+						<ListItemText primary='Users' />
+					</ListItem>
+					<ListItem button onClick={() => toggleButton("settings")}>
+						<ListItemIcon>
+							<TaskIcon />
+						</ListItemIcon>
+						<ListItemText primary='Settings' />
+					</ListItem>
+				</>
+			) : (
+				<>
+					<ListItem button onClick={() => toggleButton("dashboard")}>
+						<ListItemIcon>
+							<DashboardIcon />
+						</ListItemIcon>
+						<ListItemText primary='Dashboard' />
+					</ListItem>
+					<ListItem button onClick={() => toggleButton("settings")}>
+						<ListItemIcon>
+							<TaskIcon />
+						</ListItemIcon>
+						<ListItemText primary='Settings' />
+					</ListItem>
+				</>
+			)}
 			{/* <ListItem button>
 			<ListItemIcon>
 				<LayersIcon />

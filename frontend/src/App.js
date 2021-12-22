@@ -12,14 +12,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<SignIn />} />
 					<Route path='/register' element={<SignUp />} />
-					<Route
-						path='/dashboard'
-						element={
-							<PrivateRoute>
-								<AdminDashboard />
-							</PrivateRoute>
-						}
-					/>
+					<Route path='/dashboard' element={<PrivateRoute />} />
 				</Routes>
 			</Router>
 		</div>
