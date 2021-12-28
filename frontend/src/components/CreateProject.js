@@ -30,9 +30,11 @@ export default function CreateProject() {
 			description: data.get("projectDescription"),
 		};
 		// console.log(projectDetails);
-		dispatch(addProject(projectDetails));
-		setOpen(false);
-		dispatch(getProjects());
+		if (projectDetails.name.length > 1) {
+			dispatch(addProject(projectDetails));
+			setOpen(false);
+			dispatch(getProjects());
+		}
 	};
 	return (
 		<div>

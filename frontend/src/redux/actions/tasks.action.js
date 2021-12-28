@@ -55,6 +55,7 @@ export const assignTask = (input) => async (dispatch) => {
 
 export const addTask = (input) => async (dispatch) => {
 	try {
+		// if (input.name === "") throw new Error("Name Required");
 		dispatch({ type: ADD_TASK_REQUEST });
 		const { data } = await projectsTasksRequest.post("/tasks", input, {
 			headers: {
