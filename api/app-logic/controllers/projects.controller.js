@@ -62,6 +62,7 @@ const addProject = async (req, res) => {
 const updateProject = async (req, res) => {
 	const { id } = req.params;
 	const { name, description } = req.body;
+	console.log(id, name, description);
 	if (!name && !description)
 		return res
 			.status(401)
@@ -96,6 +97,12 @@ const deleteProject = async (req, res) => {
 		res.status(500).send({ message: error.message });
 	}
 };
+const markAsComplete = async (req, res) => {
+	try {
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+};
 
 module.exports = {
 	getAllProjects,
@@ -103,4 +110,5 @@ module.exports = {
 	addProject,
 	updateProject,
 	deleteProject,
+	markAsComplete,
 };

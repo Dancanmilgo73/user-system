@@ -30,6 +30,7 @@ import TasksTable from "./Tasks";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
+import UpdateProject from "./UpdateProject";
 
 // Row.propTypes = {
 // 	row: PropTypes.shape({
@@ -96,14 +97,17 @@ export default function ProjectsTable() {
 				<Table aria-label='collapsible table'>
 					<TableHead>
 						<TableRow>
-							<TableCell />
-							<TableCell>ProjectName</TableCell>
-							<TableCell>Status</TableCell>
+							<TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+
+							<TableCell sx={{ fontWeight: "bold" }}>ProjectName</TableCell>
+							<TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
 							<TableCell></TableCell>
 							<TableCell></TableCell>
 
 							<TableCell align='right'></TableCell>
-							<TableCell align='right'>Mark As Complete</TableCell>
+							<TableCell align='right' sx={{ fontWeight: "bold" }}>
+								Mark As Complete
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -115,8 +119,8 @@ export default function ProjectsTable() {
 							: projects
 						).map((project) => (
 							// <TaskList key={project.id} project={project} />
-							<TableRow>
-								<TableCell />
+							<TableRow key={project.id}>
+								<TableCell>{project.id}</TableCell>
 								<TableCell>{project.name}</TableCell>
 								<TableCell>In Progress</TableCell>
 								{/* <TableCell align='right'>{project.id}</TableCell> */}
@@ -128,7 +132,8 @@ export default function ProjectsTable() {
 									</Button>
 								</TableCell>
 								<TableCell align='right'>
-									<Button variant='outlined'>Update</Button>
+									{/* <Button variant='outlined'>Update</Button> */}
+									<UpdateProject projectId={project.id} key={project.id} />
 								</TableCell>
 								<TableCell align='right'>
 									<DeleteIcon color='warning' />

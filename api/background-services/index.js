@@ -48,7 +48,7 @@ cron.schedule("*/40 * * * * *", async () => {
 				to: user.email,
 				subject: `You have been assigned the project ${user.projectName}`,
 				html: `<div>
-                <h4 style="text-align: center">You have been tasked with ${user.taskName}</h4>
+                <h4 style="text-align: center, font-weight: bold;">You have been tasked with ${user.taskName}</h4>
                 <p style="text-align: center; color: grey">${user.taskDescription}</p>
                 <p style="text-align: center; color: grey">Please start working on this task as soon as youreceive this email</p>
 

@@ -52,7 +52,7 @@ export default function AssignTask({ task }) {
 	return (
 		<div>
 			<Button onClick={handleClickOpen} variant='outlined' fullWidth>
-				Assign Task
+				Assign
 			</Button>
 			<Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
 				<DialogTitle>Select from the list of available developers</DialogTitle>

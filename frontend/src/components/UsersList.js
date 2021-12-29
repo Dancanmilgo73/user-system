@@ -58,7 +58,7 @@ export default function UsersList() {
 		dispatch(getProjects());
 	}, []);
 	const handleDeleteUser = (email) => {
-		console.log("hello dispatch");
+		// console.log("hello dispatch");
 		dispatch(deleteUser({ email: email }));
 	};
 	return (
@@ -67,15 +67,19 @@ export default function UsersList() {
 			<Table sx={{ minWidth: 500 }} aria-label='custom pagination table'>
 				<TableHead>
 					<TableRow>
-						<TableCell component='th' scope='row'>
+						<TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+
+						<TableCell component='th' scope='row' sx={{ fontWeight: "bold" }}>
 							Name
 						</TableCell>
-						<TableCell>Status</TableCell>
-						<TableCell>Description</TableCell>
-						<TableCell></TableCell>
-						<TableCell></TableCell>
-						<TableCell align='right'>Mark As Complete</TableCell>
-						<TableCell align='right'>Delete</TableCell>
+						<TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
+						<TableCell sx={{ fontWeight: "bold" }}>Current Project</TableCell>
+
+						<TableCell align='right'></TableCell>
+						<TableCell align='right'></TableCell>
+						<TableCell align='right' sx={{ fontWeight: "bold" }}>
+							Delete
+						</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -84,6 +88,7 @@ export default function UsersList() {
 						: users
 					).map((user) => (
 						<TableRow key={user.userId}>
+							<TableCell>{user.userId}</TableCell>
 							<TableCell component='th' scope='row'>
 								{user.username}
 							</TableCell>

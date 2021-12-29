@@ -142,7 +142,8 @@ const updateUser = async (req, res) => {
 	}
 };
 const deleteUser = async (req, res) => {
-	const { user, email } = req.body;
+	// const { user, email } = req.body;
+	const { email } = req.params;
 	try {
 		const pool = await mssql.connect(sqlConfig);
 		await pool

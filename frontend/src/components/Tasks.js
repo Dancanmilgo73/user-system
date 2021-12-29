@@ -29,6 +29,7 @@ import CreateTask from "./CreateTask";
 import AssignTask from "./AssignTask";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
+import UpdateTask from "./UpdateTask";
 
 function TablePaginationActions(props) {
 	const theme = useTheme();
@@ -124,16 +125,17 @@ export default function TasksTable({ project, showProjects }) {
 	};
 
 	return (
-		<TableContainer component={Paper}>
+		<>
 			<h4 style={{ fontSize: "1rem", padding: "none" }}>{project.name}</h4>
 			<CreateTask projectId={project.id} />
 
 			{projectTasks.length ? (
-				<>
+				<TableContainer component={Paper}>
 					{/* <CreateTask projectId={project.id} /> */}
 					<Table sx={{ minWidth: 500 }} aria-label='custom pagination table'>
 						<TableHead>
 							<TableRow>
+								<TableCell>ID</TableCell>
 								<TableCell component='th' scope='row'>
 									Name
 								</TableCell>
@@ -154,6 +156,7 @@ export default function TasksTable({ project, showProjects }) {
 								: projectTasks
 							).map((task) => (
 								<TableRow key={task.id}>
+									<TableCell>{task.id}</TableCell>
 									<TableCell component='th' scope='row'>
 										{task.name}
 									</TableCell>
@@ -175,9 +178,10 @@ export default function TasksTable({ project, showProjects }) {
 										</TableCell>
 									)}
 									<TableCell align='right'>
-										<Button variant='outlined' fullWidth>
+										{/* <Button variant='outlined' fullWidth>
 											Update
-										</Button>
+										</Button> */}
+										<UpdateTask />
 									</TableCell>
 									<TableCell align='right'>
 										<Checkbox
@@ -234,7 +238,7 @@ export default function TasksTable({ project, showProjects }) {
 							</TableFooter>
 						)}
 					</Table>
-				</>
+				</TableContainer>
 			) : (
 				<Typography
 					component='h1'
@@ -257,6 +261,6 @@ export default function TasksTable({ project, showProjects }) {
 				onClick={() => showProjects()}>
 				Back
 			</Button>
-		</TableContainer>
+		</>
 	);
 }
