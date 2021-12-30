@@ -12,9 +12,18 @@ import {
 	GET_TASKS_FAIL,
 	GET_TASKS_REQUEST,
 	GET_TASKS_SUCCESS,
+	MARKTASK_COMPLETE_FAIL,
+	MARKTASK_COMPLETE_REQUEST,
+	MARKTASK_COMPLETE_SUCCESS,
 	SUBMIT_TASK_FAIL,
 	SUBMIT_TASK_REQUEST,
 	SUBMIT_TASK_SUCCESS,
+	UNASSIGN_TASK_FAIL,
+	UNASSIGN_TASK_REQUEST,
+	UNASSIGN_TASK_SUCCESS,
+	UPDATE_PROJECT_FAIL,
+	UPDATE_PROJECT_SUCCESS,
+	UPDATE_TASK_REQUEST,
 } from "../actionTypes";
 
 export const getTasks = () => async (dispatch) => {
@@ -99,5 +108,67 @@ export const deleteTask = (id) => async (dispatch) => {
 		dispatch(getTasks());
 	} catch (error) {
 		dispatch({ type: DELETE_TASK_FAIL, payload: error.response.data.message });
+	}
+};
+export const unassignTask = (input) => async (dispatch) => {
+	try {
+		dispatch({ type: UNASSIGN_TASK_REQUEST });
+		const { data } = await projectsTasksRequest.put(
+			`/tasks/unassign`,
+			{ input },
+			{
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
+				},
+			}
+		);
+		// console.log(data);
+		dispatch({ type: UNASSIGN_TASK_SUCCESS, payload: data });
+		dispatch(getTasks());
+	} catch (error) {
+		dispatch({
+			type: UNASSIGN_TASK_FAIL,
+			payload: error.response.data.message,
+		});
+	}
+};
+export const updateTask = (input) => async (dispatch) => {
+	try {
+		dispatch({ type: UPDATE_TASK_REQUEST });
+		const { data } = await projectsTasksRequest.post(
+			`/tasks/update/${input.id}`,
+
+			{
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
+				},
+			}
+		);
+		dispatch({ type: UPDATE_PROJECT_SUCCESS, payload: data });
+	} catch (error) {
+		dispatch({
+			type: UPDATE_PROJECT_FAIL,
+			payload: error.response.data.message,
+		});
+	}
+};
+export const submitCompleteTask = (input) => async (dispatch) => {
+	try {
+		dispatch({ type: MARKTASK_COMPLETE_REQUEST });
+		const { data } = await projectsTasksRequest.put(
+			`/tasks/complete/${input.id}`,
+
+			{
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
+				},
+			}
+		);
+		dispatch({ type: MARKTASK_COMPLETE_SUCCESS, payload: data });
+	} catch (error) {
+		dispatch({
+			type: MARKTASK_COMPLETE_FAIL,
+			payload: error.response.data.message,
+		});
 	}
 };

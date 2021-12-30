@@ -19,7 +19,11 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../redux/actions/projects.actions";
+import {
+	deleteProject,
+	getProjects,
+	markCompleteProject,
+} from "../redux/actions/projects.actions";
 import Button from "@mui/material/Button";
 
 import CreateProject from "./CreateProject";
@@ -88,6 +92,11 @@ export default function ProjectsTable() {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
+	const handleMarkAsComplete = (e) => {
+		if (e.target.checked) {
+			dispatch(markCompleteProject(e.target.value));
+		}
+	};
 
 	return showProjects ? (
 		<>
@@ -122,7 +131,14 @@ export default function ProjectsTable() {
 							<TableRow key={project.id}>
 								<TableCell>{project.id}</TableCell>
 								<TableCell>{project.name}</TableCell>
-								<TableCell>In Progress</TableCell>
+								<TableCell
+									sx={
+										project.isCompleted
+											? { color: "inherit" }
+											: { color: "green", fontStyle: "italic" }
+									}>
+									{project.isCompleted ? "Complete" : "In progress"}
+								</TableCell>
 								{/* <TableCell align='right'>{project.id}</TableCell> */}
 								<TableCell align='right'>
 									<Button
@@ -136,14 +152,18 @@ export default function ProjectsTable() {
 									<UpdateProject projectId={project.id} key={project.id} />
 								</TableCell>
 								<TableCell align='right'>
-									<DeleteIcon color='warning' />
+									<Button onClick={() => dispatch(deleteProject(project.id))}>
+										<DeleteIcon color='warning' />
+									</Button>
 								</TableCell>
 								<TableCell align='right'>
-									<Checkbox
-										color='success'
-										// onChange={handleChange}
-										value={project.id}
-									/>
+									{!project.isCompleted && (
+										<Checkbox
+											color='success'
+											onChange={handleMarkAsComplete}
+											value={project.id}
+										/>
+									)}
 								</TableCell>
 							</TableRow>
 						))}
