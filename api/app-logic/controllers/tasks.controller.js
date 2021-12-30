@@ -60,6 +60,22 @@ const assignTask = async (req, res) => {
 		res.status(500).send({ message: error.message });
 	}
 };
+const unAssign = async (req, res) => {
+	try {
+		const { userId, id } = req.body;
+		// const pool = await mssql.connect(sqlConfig);
+		// const data = await pool
+		// 	.request()
+		// 	.input("taskId", mssql.Int, id)
+		// 	.input("userId", mssql.Int, userId)
+		// 	.execute("dbo.spTasks_AssignTask");
+		res.status(200).send({
+			message: `Task asingned to the user with the id of ${userId}: ${data}`,
+		});
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+};
 const addTask = async (req, res) => {
 	try {
 		const { name, description, projectId } = req.body;
@@ -130,7 +146,7 @@ const updateTask = async (req, res) => {
 };
 const submitAsComplete = async (req, res) => {
 	const { id } = req.params;
-	console.log(id);
+	// console.log(id);
 	try {
 		const pool = await mssql.connect(sqlConfig);
 		await pool
@@ -161,4 +177,5 @@ module.exports = {
 	submitAsComplete,
 	addTask,
 	sendEmailOnAssignedTask,
+	unAssign,
 };

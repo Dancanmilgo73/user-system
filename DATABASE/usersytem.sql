@@ -135,7 +135,8 @@ select * from dbo.users
 -- ////projects
 alter table dbo.projects
     add isDeleted bit not null default 0
-
+alter table dbo.projects 
+    add isCompleted bit not null default 0
 
 
 select * from dbo.projects

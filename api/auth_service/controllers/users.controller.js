@@ -164,12 +164,10 @@ const getAllUsers = async (req, res) => {
 		res.status(500).send({ message: error.message });
 	}
 };
-const sendEmailOnRegister = async (req, res) => {
+const sendSMSOnRegister = async (req, res) => {
 	try {
 		const pool = await mssql.connect(sqlConfig);
-		const data = await pool
-			.request()
-			.execute("dbo.spUsers_sendEmailOnRegister");
+		const data = await pool.request().execute("dbo.spUsers_sendSMSOnRegister");
 		res.status(200).json(data.recordset);
 	} catch (error) {
 		res.status(500).send({ message: error.message });
@@ -181,5 +179,5 @@ module.exports = {
 	updateUser,
 	deleteUser,
 	getAllUsers,
-	sendEmailOnRegister,
+	sendSMSOnRegister,
 };

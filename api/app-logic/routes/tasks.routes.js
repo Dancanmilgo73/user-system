@@ -8,6 +8,7 @@ const {
 	deleteTask,
 	submitAsComplete,
 	sendEmailOnAssignedTask,
+	unAssign,
 } = require("../controllers/tasks.controller");
 const { Authenticator, isAdmin } = require("../middlewares/Authenticator");
 const router = express.Router();
@@ -16,6 +17,8 @@ router.route("/").post(Authenticator, isAdmin, addTask);
 
 // Assign a task to a user,,,,only admin
 router.route("/assign").post(Authenticator, isAdmin, assignTask);
+router.route("/unassign").put(Authenticator, isAdmin, unAssign);
+
 // Update a task using id,,,only admins
 router.route("/update/:id").post(Authenticator, isAdmin, updateTask);
 // Delete a project,,,, only admins
@@ -28,4 +31,6 @@ router.route("/emailservice").get(sendEmailOnAssignedTask);
 router.route("/submit/:id").get(Authenticator, submitAsComplete);
 // Get one task using an id
 router.route("/:id").get(Authenticator, getTaskById);
+// mark as complete
+router.route("/complete/:id").put(Authenticator, isAdmin, submitAsComplete);
 module.exports = router;

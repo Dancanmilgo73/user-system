@@ -6,6 +6,7 @@ const {
 	deleteUser,
 	getAllUsers,
 	sendEmailOnRegister,
+	sendSMSOnRegister,
 } = require("../controllers/users.controller");
 const { Authenticator, isAdmin } = require("../middlewares/Authenticator");
 const router = express.Router();
@@ -22,5 +23,5 @@ router.route("/update").patch(Authenticator, isAdmin, updateUser);
 // Only the admin and the user who owns the account can delete ones details
 router.route("/delete/:email").delete(Authenticator, isAdmin, deleteUser);
 // Route accessible to the background email service
-router.route("/emailservice").get(sendEmailOnRegister);
+router.route("/emailservice").get(sendSMSOnRegister);
 module.exports = router;

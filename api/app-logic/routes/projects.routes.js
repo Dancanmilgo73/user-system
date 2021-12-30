@@ -5,6 +5,7 @@ const {
 	addProject,
 	updateProject,
 	deleteProject,
+	markAsComplete,
 } = require("../controllers/projects.controller");
 const { Authenticator, isAdmin } = require("../middlewares/Authenticator");
 const router = express.Router();
@@ -17,7 +18,9 @@ router.route("/add").post(Authenticator, isAdmin, addProject);
 // Only the admins can update a project
 router.route("/:id").patch(Authenticator, isAdmin, updateProject);
 // Only admins can delete a project
-router.route("/delete/:id").delete(Authenticator, isAdmin, deleteProject);
+router.route("/:id").delete(Authenticator, isAdmin, deleteProject);
 // Assign a project using a project id - Only for admins
 router.route("/assign/:id");
+// submit
+router.route("/complete/:id").put(Authenticator, isAdmin, markAsComplete);
 module.exports = router;

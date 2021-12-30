@@ -173,19 +173,19 @@
 --             set userId = @userId
 --         where taskId = @taskId;
 --     END
-
+-- update dbo.users set projectId = NULL
 -- exec dbo.spTasks_AssignTask 2,5
 -- ---------------------------/////Delete a task//////------------
 -- select * from dbo.tasks
-alter PROCEDURE dbo.spTasks_DeleteTask
-    @id INT
-    AS
-    BEGIN
-        update dbo.tasks
-        set isDeleted = 1 where taskId = @id and userId is null
-    END
+-- alter PROCEDURE dbo.spTasks_DeleteTask
+--     @id INT
+--     AS
+--     BEGIN
+--         update dbo.tasks
+--         set isDeleted = 1 where taskId = @id and userId is null
+--     END
 
-exec dbo.spTasks_DeleteTask 3
+-- exec dbo.spTasks_DeleteTask 1016
 
 -- /-----------/////update task///////-----------------------
 -- drop PROCEDURE if exists dbo.spTasks_UpdateTask
@@ -226,31 +226,74 @@ exec dbo.spTasks_DeleteTask 3
 -- exec dbo.spTasks_SubmitCompleteTask 3
 
 --------------------------------------- Send emails when a user  is assigned a task
-alter procedure dbo.spTasks_SendEmailTaskAlert
-AS
-BEGIN
-select dbo.users.userId, dbo.users.username, dbo.users.email, dbo.tasks.taskName,dbo.tasks.taskDescription,
-dbo.projects.projectId, dbo.projects.projectName,  dbo.tasks.emailSent
- from dbo.users inner join dbo.tasks on dbo.tasks.userId = dbo.users.userId 
-inner join dbo.projects on dbo.projects.projectId = dbo.tasks.project_Id WHERE dbo.users.emailSent = 1 and dbo.tasks.emailSent = 0;
-update dbo.tasks
-    set emailSent = 1
-END
-
--- exec  dbo.spTasks_SendEmailTaskAlert
-exec dbo.spUsers_GetAllUsers
-
--- ----------------------------------Send Email when a user registers-------------------------
--- CREATE PROCEDURE dbo.spUsers_sendEmailOnRegister
+-- alter procedure dbo.spTasks_SendEmailTaskAlert
 -- AS
 -- BEGIN
---     select * from dbo.users where emailSent = 0;
-    update dbo.users
-        set emailSent = 0 where userId = 38
+-- select dbo.users.userId, dbo.users.username, dbo.users.email, dbo.tasks.taskName,dbo.tasks.taskDescription,
+-- dbo.projects.projectId, dbo.projects.projectName,  dbo.tasks.emailSent
+--  from dbo.users inner join dbo.tasks on dbo.tasks.userId = dbo.users.userId 
+-- inner join dbo.projects on dbo.projects.projectId = dbo.tasks.project_Id WHERE dbo.users.emailSent = 1 and dbo.tasks.emailSent = 0 and 
+-- dbo.users.isDeleted = 0;
+-- update dbo.tasks
+--     set emailSent = 0 where dbo.tasks.userId is not null
 -- END
 
--- exec dbo.spUsers_sendEmailOnRegister
+-- exec  dbo.spTasks_SendEmailTaskAlert
+-- exec dbo.spUsers_GetAllUsers
+
+-- ----------------------------------Send Email when a user registers-------------------------
+-- drop PROCEDURE dbo.spUsers_sendEmailOnRegister
+CREATE PROCEDURE dbo.spUsers_sendSMSOnRegister
+AS
+BEGIN
+    select * from dbo.users where emailSent = 0 and isDeleted = 0;
+    update dbo.users
+        set emailSent = 0 where isDeleted = 0
+END
+
+-- exec dbo.spUsers_sendSMSOnRegister
 
 
-update dbo.tasks
- set emailSent = 0 where userId =37
+-- update dbo.tasks
+--  set emailSent = 0 where userId =37
+--  select * from dbo.tasks
+
+-- create procedure dbo.spProjects_Delete
+-- @id int
+-- AS
+-- BEGIN
+--     update dbo.projects
+--         set isDeleted = 1 where projectId = @id
+--     update dbo.tasks
+--         set isDeleted = 1 where project_Id = @id
+--     update dbo.users
+--         set projectId = NULL where projectId =@id
+
+-- END
+
+-- exec dbo.spProjects_Delete 14
+-- select * from dbo.projects where isDeleted = 0
+-- select * from dbo.tasks
+
+-- alter procedure dbo.spProjects_MarkAsComplete
+-- @id INT
+-- AS
+-- BEGIN
+-- DECLARE @pendingTasks INT;
+-- DECLARE @returnmessage VARCHAR(100);
+-- select @pendingTasks = COUNT(*) from dbo.tasks where project_Id = @id and (isCompleted = 0 or isCompleted is null);
+-- IF @pendingTasks > 0 
+--     BEGIN
+--      SET @returnmessage = 'Cannot complete project because of pending tasks';
+--      SELECT 'message' = @returnmessage;
+--     END
+-- ELSE
+--     BEGIN
+--     SET @returnmessage = 'Project completed';
+--         update dbo.projects
+--             set isCompleted = 1 where projectId = @id;
+--         SELECT 'message' = @returnmessage;
+--     END
+-- END
+
+-- exec dbo.spProjects_MarkAsComplete  1026

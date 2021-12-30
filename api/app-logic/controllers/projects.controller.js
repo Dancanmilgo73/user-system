@@ -11,6 +11,7 @@ const getAllProjects = async (req, res) => {
 				id: project.projectId,
 				name: project.projectName,
 				description: project.projectDescription,
+				isCompleted: project.isCompleted,
 			};
 		});
 		res.status(200).json(response);
@@ -93,12 +94,25 @@ const deleteProject = async (req, res) => {
 	const { id } = req.params;
 	try {
 		const pool = await mssql.connect(sqlConfig);
+		const data = await pool
+			.request()
+			.input("id", mssql.Int, id)
+			.execute("dbo.spProjects_Delete");
+		res.status(200).json(data);
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
 };
 const markAsComplete = async (req, res) => {
 	try {
+		console.log("hello, markascomplete ran");
+		const { id } = req.params;
+		const pool = await mssql.connect(sqlConfig);
+		const data = await pool
+			.request()
+			.input("id", mssql.Int, id)
+			.execute("dbo.spProjects_MarkAsComplete ");
+		res.status(200).json(data.recordset[0]);
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
