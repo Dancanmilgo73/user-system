@@ -120,7 +120,7 @@ insert into dbo.usersProjects(userId, projectId) values(10,4)
 
 
 ALTER TABLE dbo.usersProjects 
-    add UNIQUE(userId)
+    add UNIQUE(userId) 
 
 
 -- ----------------------------------------Add column for soft delete------------------
@@ -131,12 +131,15 @@ alter table dbo.users
 alter table dbo.users
     add emailSent bit not null default 0
 select * from dbo.users
-
+alter table dbo.users
+    add phoneNumber VARCHAR(15) not null default '254700000940'
+select * from users where isDeleted = 0
 -- ////projects
 alter table dbo.projects
     add isDeleted bit not null default 0
 alter table dbo.projects 
     add isCompleted bit not null default 0
+
 
 
 select * from dbo.projects

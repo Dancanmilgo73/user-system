@@ -47,7 +47,7 @@ export const assignTask = (input) => async (dispatch) => {
 		dispatch({ type: ASSIGN_TASK_REQUEST });
 		const { data } = await projectsTasksRequest.post(
 			`/tasks/assign`,
-			{ userId: input.userId, id: input.taskId },
+			{ userId: input.userId, id: input.taskId, action: input.action },
 			{
 				headers: {
 					Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
@@ -110,33 +110,13 @@ export const deleteTask = (id) => async (dispatch) => {
 		dispatch({ type: DELETE_TASK_FAIL, payload: error.response.data.message });
 	}
 };
-export const unassignTask = (input) => async (dispatch) => {
-	try {
-		dispatch({ type: UNASSIGN_TASK_REQUEST });
-		const { data } = await projectsTasksRequest.put(
-			`/tasks/unassign`,
-			{ input },
-			{
-				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem("stored-token")}`,
-				},
-			}
-		);
-		// console.log(data);
-		dispatch({ type: UNASSIGN_TASK_SUCCESS, payload: data });
-		dispatch(getTasks());
-	} catch (error) {
-		dispatch({
-			type: UNASSIGN_TASK_FAIL,
-			payload: error.response.data.message,
-		});
-	}
-};
+
 export const updateTask = (input) => async (dispatch) => {
 	try {
 		dispatch({ type: UPDATE_TASK_REQUEST });
-		const { data } = await projectsTasksRequest.post(
+		const { data } = await projectsTasksRequest.put(
 			`/tasks/update/${input.id}`,
+			{ newName: input.name, newDescription: input.description },
 
 			{
 				headers: {
@@ -145,6 +125,7 @@ export const updateTask = (input) => async (dispatch) => {
 			}
 		);
 		dispatch({ type: UPDATE_PROJECT_SUCCESS, payload: data });
+		dispatch(getTasks());
 	} catch (error) {
 		dispatch({
 			type: UPDATE_PROJECT_FAIL,
@@ -152,10 +133,10 @@ export const updateTask = (input) => async (dispatch) => {
 		});
 	}
 };
-export const submitCompleteTask = (input) => async (dispatch) => {
+export const markCompleteTask = (input) => async (dispatch) => {
 	try {
 		dispatch({ type: MARKTASK_COMPLETE_REQUEST });
-		const { data } = await projectsTasksRequest.put(
+		const { data } = await projectsTasksRequest.get(
 			`/tasks/complete/${input.id}`,
 
 			{

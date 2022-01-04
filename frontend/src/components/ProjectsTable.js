@@ -65,8 +65,11 @@ export default function ProjectsTable() {
 
 	const [showProjects, setShowProjects] = useState(true);
 	const [currentProject, setCurrentProject] = useState("");
-	const { projects: data, loading } = useSelector((state) => state.projects);
-	console.log(data);
+	const { projects: data } = useSelector((state) => state.projects);
+	const { error, message, loading } = useSelector(
+		(state) => state.submitProject
+	);
+	// console.log(data);
 	useEffect(() => {
 		dispatch(getProjects());
 	}, [dispatch]);
@@ -94,16 +97,23 @@ export default function ProjectsTable() {
 	};
 	const handleMarkAsComplete = (e) => {
 		if (e.target.checked) {
-			dispatch(markCompleteProject(e.target.value));
+			dispatch(markCompleteProject({ id: e.target.value, status: "complete" }));
 		}
 	};
+	const handleMarkAsInComplete = (id) => {
+		dispatch(markCompleteProject({ id: id, status: "incomplete" }));
+	};
+	if (error) {
+		window.location.reload();
+		alert(message);
+	}
 
 	return showProjects ? (
 		<>
 			<CreateProject />
 			<TableContainer component={Paper}>
 				{/* <Button variant='contained'>Create New Project</Button> */}
-				<Table aria-label='collapsible table'>
+				<Table>
 					<TableHead>
 						<TableRow>
 							<TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
@@ -141,23 +151,38 @@ export default function ProjectsTable() {
 								</TableCell>
 								{/* <TableCell align='right'>{project.id}</TableCell> */}
 								<TableCell align='right'>
-									<Button
-										variant='outlined'
-										onClick={() => handleViewTasks(project)}>
-										Tasks
-									</Button>
+									{project.isCompleted ? (
+										<Button disabled>Tasks</Button>
+									) : (
+										<Button
+											variant='outlined'
+											onClick={() => handleViewTasks(project)}>
+											Tasks
+										</Button>
+									)}
 								</TableCell>
 								<TableCell align='right'>
 									{/* <Button variant='outlined'>Update</Button> */}
 									<UpdateProject projectId={project.id} key={project.id} />
 								</TableCell>
 								<TableCell align='right'>
-									<Button onClick={() => dispatch(deleteProject(project.id))}>
+									<Button
+										onClick={() => {
+											dispatch(deleteProject(project.id));
+											window.location.reload();
+										}}>
 										<DeleteIcon color='warning' />
 									</Button>
 								</TableCell>
 								<TableCell align='right'>
-									{!project.isCompleted && (
+									{project.isCompleted ? (
+										<Checkbox
+											color='success'
+											onChange={() => handleMarkAsInComplete(project.id)}
+											value={project.id}
+											defaultChecked
+										/>
+									) : (
 										<Checkbox
 											color='success'
 											onChange={handleMarkAsComplete}
@@ -179,7 +204,7 @@ export default function ProjectsTable() {
 									page={page}
 									SelectProps={{
 										inputProps: {
-											"aria-label": "projectTasks per page",
+											"aria-label": "Tasks per page",
 										},
 										native: true,
 									}}

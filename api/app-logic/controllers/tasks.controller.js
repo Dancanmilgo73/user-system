@@ -46,36 +46,33 @@ const getTaskById = async (req, res) => {
 };
 const assignTask = async (req, res) => {
 	try {
-		const { userId, id } = req.body;
+		const { userId, id, action } = req.body;
 		const pool = await mssql.connect(sqlConfig);
-		const data = await pool
-			.request()
-			.input("taskId", mssql.Int, id)
-			.input("userId", mssql.Int, userId)
-			.execute("dbo.spTasks_AssignTask");
-		res.status(200).send({
-			message: `Task asingned to the user with the id of ${userId}: ${data}`,
-		});
+		if (action === "assign") {
+			// const pool = await mssql.connect(sqlConfig);
+			const data = await pool
+				.request()
+				.input("taskId", mssql.Int, id)
+				.input("userId", mssql.Int, userId)
+				.execute("dbo.spTasks_AssignTask");
+			res.status(200).send({
+				message: `Task asingned to the user with the id of ${userId}: ${data.recordset}`,
+			});
+		}
+		if (action === "unassign") {
+			const data = await pool
+				.request()
+				.input("taskId", mssql.Int, id)
+				.execute("dbo.tasks_UnAssignTask");
+			res.status(200).send({
+				message: `Task unassingned from  the user with the id of ${userId}: ${data.recordset}`,
+			});
+		}
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
 };
-const unAssign = async (req, res) => {
-	try {
-		const { userId, id } = req.body;
-		// const pool = await mssql.connect(sqlConfig);
-		// const data = await pool
-		// 	.request()
-		// 	.input("taskId", mssql.Int, id)
-		// 	.input("userId", mssql.Int, userId)
-		// 	.execute("dbo.spTasks_AssignTask");
-		res.status(200).send({
-			message: `Task asingned to the user with the id of ${userId}: ${data}`,
-		});
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
-};
+
 const addTask = async (req, res) => {
 	try {
 		const { name, description, projectId } = req.body;
@@ -153,7 +150,9 @@ const submitAsComplete = async (req, res) => {
 			.request()
 			.input("id", mssql.Int, id)
 			.execute("dbo.spTasks_SubmitCompleteTask");
-		res.status(200).send({ message: `Task with id ${id} marked as complete` });
+		res
+			.status(200)
+			.send({ message: `Task with id ${id} submitted as complete` });
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}
@@ -167,7 +166,21 @@ const sendEmailOnAssignedTask = async (req, res) => {
 		res.status(500).send({ message: error.message });
 	}
 };
+const markTaskAsComplete = async (req, res) => {
+	const { id } = req.params;
+	console.log(id);
 
+	try {
+		const pool = await mssql.connect(sqlConfig);
+		await pool
+			.request()
+			.input("id", mssql.Int, id)
+			.execute("dbo.spTasksMarkAsComplete");
+		res.status(200).send({ message: `Task with id ${id} marked as complete` });
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+};
 module.exports = {
 	getAllTasks,
 	getTaskById,
@@ -177,5 +190,5 @@ module.exports = {
 	submitAsComplete,
 	addTask,
 	sendEmailOnAssignedTask,
-	unAssign,
+	markTaskAsComplete,
 };

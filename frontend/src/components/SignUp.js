@@ -19,7 +19,8 @@ import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/actions/auth.actions";
 import Spinner from "./Spinner";
-
+import Autocomplete from "@mui/material/Autocomplete";
+import { countries } from "../helpers/countries";
 function Copyright(props) {
 	return (
 		<Typography
@@ -55,7 +56,9 @@ export default function SignUp() {
 			username: data.get("userName"),
 			password: data.get("password"),
 			confirmPassword: data.get("confirmPassword"),
+			phoneNumber: `${data.get("code")}${data.get("phoneNumber")}`,
 		};
+		console.log(registerDetails);
 		dispatch(registerUser(registerDetails));
 	};
 
@@ -104,16 +107,7 @@ export default function SignUp() {
 									autoFocus
 								/>
 							</Grid>
-							{/* <Grid item xs={12} sm={6}>
-								<TextField
-									required
-									fullWidth
-									id='lastName'
-									label='Last Name'
-									name='lastName'
-									autoComplete='family-name'
-								/>
-							</Grid> */}
+
 							<Grid item xs={12}>
 								<TextField
 									required
@@ -146,14 +140,42 @@ export default function SignUp() {
 									autoComplete='new-password'
 								/>
 							</Grid>
-							{/* <Grid item xs={12}>
-								<FormControlLabel
-									control={
-										<Checkbox value='allowExtraEmails' color='primary' />
-									}
-									label='I want to receive project updates via email.'
+							<Grid item xs={4}>
+								<Autocomplete
+									id='country-select-demo'
+									options={countries}
+									autoHighlight
+									getOptionLabel={(option) => option.phone}
+									renderOption={(props, option) => (
+										<Box component='li' {...props}>
+											{option.code} +{option.phone}
+										</Box>
+									)}
+									renderInput={(params) => (
+										<TextField
+											{...params}
+											label='CODE'
+											name='code'
+											id='code'
+											inputProps={{
+												...params.inputProps,
+												// autoComplete: "new-password", // disable autocomplete and autofill
+											}}
+										/>
+									)}
 								/>
-							</Grid> */}
+							</Grid>
+							<Grid item xs={8}>
+								<TextField
+									required
+									fullWidth
+									name='phoneNumber'
+									label='phoneNumber'
+									type='tel'
+									id='phoneNumber'
+									// autoComplete='phoneNumber'
+								/>
+							</Grid>
 						</Grid>
 						<Button
 							type='submit'

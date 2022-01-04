@@ -12,8 +12,9 @@ const registerUser = async (req, res, next) => {
 	);
 
 	try {
-		const { email, username, password, confirmPassword } = req.body;
-		if (!email || !username || !password || !confirmPassword)
+		const { email, username, password, confirmPassword, phoneNumber } =
+			req.body;
+		if (!email || !username || !password || !confirmPassword || !phoneNumber)
 			return res.status(401).send({ message: "fill in all credentials" });
 
 		if (password !== confirmPassword)
@@ -33,14 +34,20 @@ const registerUser = async (req, res, next) => {
 				message: "Password must contain small, letters caps and numbers",
 			});
 		const hashedPassword = await bcrypt.hash(password, 10);
-		const user = { email, name: username, password: hashedPassword };
-		// console.log(user);
+		const user = {
+			email,
+			name: username,
+			password: hashedPassword,
+			phoneNumber,
+		};
+		console.log(user);
 		const pool = await mssql.connect(sqlConfig);
 		const result = await pool
 			.request()
 			.input("username", mssql.VarChar, user.name)
 			.input("email", mssql.VarChar, user.email)
 			.input("password", mssql.VarChar, user.password)
+			.input("phoneNumber", mssql.VarChar, user.phoneNumber)
 			.execute("dbo.spUsers_AddUser");
 		//   .catch(err=> res.status(401).send({message: "email already in use"}));
 		// res.status(201).send({ message: "User was added" });
@@ -83,6 +90,7 @@ const loginUser = async (req, res) => {
 					roleId: user.RoleId,
 					id: user.userId,
 					projectId: user.projectId,
+					email: user.email,
 				},
 			});
 		});
@@ -94,15 +102,17 @@ const loginUser = async (req, res) => {
 const updateUser = async (req, res) => {
 	const { user, newPassword, newEmail, newUserName, email } = req.body;
 	// if(!newPassword || !newEmail || !newUserName) return res.status(400).send({message: "Not Details to update were passed in"})
+	console.log(req.body);
 	try {
 		const pool = await mssql.connect(sqlConfig);
 		const data = await pool
 			.request()
-			.input("email", mssql.VarChar, email)
-			.execute("dbo.spUsers_LoginUser");
+			.input("email", mssql.VarChar, user.email)
+			.execute("dbo.spUsers_SelectUser");
 		const response = data.recordset[0];
 		// console.log(response);
-		const hashedPassword = newPassword && (await bcrypt.hash(newPassword, 10));
+		const hashedPassword =
+			newPassword.length > 0 && (await bcrypt.hash(newPassword, 10));
 
 		await pool
 			.request()
@@ -110,29 +120,42 @@ const updateUser = async (req, res) => {
 			.input(
 				"username",
 				mssql.VarChar,
-				newUserName ? newUserName : response.username
+				newUserName.length > 0 ? newUserName : response.username
 			)
-			.input("email", mssql.VarChar, newEmail ? newEmail : response.email)
+			.input(
+				"email",
+				mssql.VarChar,
+				newEmail.length > 0 ? newEmail : response.email
+			)
 			.input(
 				"password",
 				mssql.VarChar,
 				hashedPassword ? hashedPassword : response.password
 			)
-			.input("roleId", mssql.Int, response.roleId)
+			.input("roleId", mssql.Int, response.RoleId)
 			.execute("dbo.spUsers_UpdateUser");
 		if (user.roleId !== 1) {
 			const token = JWT.sign(
 				{
-					user: newUserName ? newUserName : response.username,
+					user: newUserName > 0 ? newUserName : response.username,
 					password: hashedPassword ? hashedPassword : response.password,
-					email: newEmail ? newEmail : response.email,
+					email: newEmail > 0 ? newEmail : response.email,
+					roleId: user.RoleId,
+					projectId: response.projectId,
 				},
 				process.env.SECRET_KEY,
 				{ expiresIn: "1h" }
 			);
-			return res
-				.status(200)
-				.send({ message: "details updated", accessToken: token });
+			return res.status(200).send({
+				user: {
+					name: newUserName > 0 ? newUserName : response.username,
+					roleId: response.RoleId,
+					id: response.userId,
+					projectId: response.projectId,
+					email: response.email,
+				},
+				accessToken: token,
+			});
 		}
 		res.status(200).send({
 			message: `Details for the user with email ${email} were updated by admin`,

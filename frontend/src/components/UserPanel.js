@@ -29,6 +29,7 @@ import { useSelector } from "react-redux";
 // import Orders from "./Orders";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UserDashboard from "./UserDashboard";
+import UserSettings from "./UserSettings";
 function Copyright(props) {
 	return (
 		<Typography
@@ -95,7 +96,7 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
-	const [open, setOpen] = React.useState(true);
+	const [open, setOpen] = React.useState(false);
 	const { userDetails } = useSelector((state) => state.auth);
 
 	const toggleDrawer = () => {
@@ -108,7 +109,7 @@ function DashboardContent() {
 	const tableContent = (activeButton) => {
 		switch (activeButton) {
 			case "settings":
-				return <>welcome to settings</>;
+				return <UserSettings />;
 			default:
 				return <UserDashboard />;
 		}
@@ -189,7 +190,7 @@ function DashboardContent() {
 						{/* <ProjectsTable /> */}
 
 						<Grid container spacing={3}></Grid>
-						<Copyright sx={{ pt: 4 }} />
+						{/* <Copyright sx={{ pt: 4 }} /> */}
 					</Container>
 				</Box>
 			</Box>

@@ -113,11 +113,13 @@ export const deleteProject = (id) => async (dispatch) => {
 	}
 };
 
-export const markCompleteProject = (id) => async (dispatch) => {
+export const markCompleteProject = (input) => async (dispatch) => {
 	try {
+		console.log(input);
 		dispatch({ type: SUBMIT_PROJECT_REQUEST });
 		const { data } = await projectsTasksRequest.put(
-			`/projects/complete/${id}`,
+			`/projects/complete/${input.id}`,
+			{ status: input.status },
 			{
 				headers: {
 					ContentType: "application/json",
@@ -126,7 +128,9 @@ export const markCompleteProject = (id) => async (dispatch) => {
 			}
 		);
 		dispatch({ type: SUBMIT_PROJECT_SUCCESS, payload: data });
+		dispatch(getProjects());
 	} catch (error) {
+		console.log(error.response.data.message);
 		dispatch({
 			type: SUBMIT_PROJECT_FAIL,
 			payload: error.response.data.message,

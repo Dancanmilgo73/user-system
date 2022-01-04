@@ -11,17 +11,18 @@
 -- exec dbo.spUsers_GetAllUsers
 
 -- -----------------------------------------create user------------
--- create procedure dbo.spUsers_AddUser
+-- alter procedure dbo.spUsers_AddUser
 --     @username varchar(50),
 --     @email varchar(50),
---     @password varchar(500)
+--     @password varchar(500),
+--     @phoneNumber VARCHAR(15)
 -- as
 -- begin 
---     insert into dbo.users(username, email, password) values(@username, @email, @password)
+--     insert into dbo.users(username, email, password, phoneNumber) values(@username, @email, @password, @phoneNumber)
 -- end
 
 
--- exec dbo.spUsers_AddUser 'tich', 'ch@gmail', 'Dancan2021yy'
+-- exec dbo.spUsers_AddUser 'tich', 'ch@gmaill', 'Dancan2021ykkl', '254700000940'
 
 ---------------------------------------------login user ----------------------------
 -- drop procedure if exists dbo.spUsers_SelectUser;
@@ -175,6 +176,25 @@
 --     END
 -- update dbo.users set projectId = NULL
 -- exec dbo.spTasks_AssignTask 2,5
+-- ----------------------------------------------------unassign a task ----------------------------
+-- 
+-- alter PROCEDURE dbo.tasks_UnAssignTask
+--     @taskId int 
+--     AS
+--     BEGIN
+--     DECLARE @userId int;
+--         set @userId = (select userId from dbo.tasks where taskId = @taskId)
+--     DECLARE @otherTasks int;
+--         update dbo.tasks
+--             set userId = null
+--         where taskId = @taskId;
+--         select @otherTasks = COUNT(*) from dbo.tasks where userId = @userId;
+--         IF @otherTasks < 1
+--             UPDATE dbo.users 
+--                 set projectId = null where userId = @userId
+--     END
+--     exec dbo.tasks_UnAssignTask 1049
+--     select * from dbo.users where isDeleted = 0
 -- ---------------------------/////Delete a task//////------------
 -- select * from dbo.tasks
 -- alter PROCEDURE dbo.spTasks_DeleteTask
@@ -213,13 +233,14 @@
 
 
 -- -----------------------------------//////Submit Task as Complete/////--------------------------
--- DROP PROCEDURE if exists dbo.spTasks_SubmitCompleteTask
--- create PROCEDURE dbo.spTasks_SubmitCompleteTask
+-- -- DROP PROCEDURE if exists dbo.spTasks_SubmitCompleteTask
+-- alter PROCEDURE dbo.spTasks_SubmitCompleteTask
 --     @id INT
 --     AS
 --     BEGIN
 --         update dbo.tasks
---             set isSubmitted = 1
+--             set isSubmitted = 1,
+--                 isCompleted = 0 
 --         where taskId = @id
 --     END
 
@@ -243,13 +264,13 @@
 
 -- ----------------------------------Send Email when a user registers-------------------------
 -- drop PROCEDURE dbo.spUsers_sendEmailOnRegister
-CREATE PROCEDURE dbo.spUsers_sendSMSOnRegister
-AS
-BEGIN
-    select * from dbo.users where emailSent = 0 and isDeleted = 0;
-    update dbo.users
-        set emailSent = 0 where isDeleted = 0
-END
+-- CREATE PROCEDURE dbo.spUsers_sendSMSOnRegister
+-- AS
+-- BEGIN
+--     select * from dbo.users where emailSent = 0 and isDeleted = 0;
+--     update dbo.users
+--         set emailSent = 0 where isDeleted = 0
+-- END
 
 -- exec dbo.spUsers_sendSMSOnRegister
 
@@ -297,3 +318,21 @@ END
 -- END
 
 -- exec dbo.spProjects_MarkAsComplete  1026
+-- create procedure dbo.spProjects_UnMarkAsComplete
+-- @id INT
+-- AS
+-- BEGIN
+--     update dbo.projects
+--             set isCompleted = 0 where projectId = @id;
+-- END
+-- exec dbo.spProjects_UnMarkAsComplete 1026
+-- exec dbo.spProjects_GetAllProjects
+-- select * from dbo.tasks where isDeleted =0
+
+create procedure dbo.spTasksMarkAsComplete
+    @id INT
+    AS
+    BEGIN
+    update dbo.tasks
+        set isCompleted = 1 where taskId = @id
+    END

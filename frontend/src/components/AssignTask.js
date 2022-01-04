@@ -44,8 +44,8 @@ export default function AssignTask({ task }) {
 	};
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log({ taskId: task.id, userId: userId });
-		dispatch(assignTask({ taskId: task.id, userId: userId }));
+		// console.log({ taskId: task.id, userId: userId });
+		dispatch(assignTask({ taskId: task.id, userId: userId, action: "assign" }));
 		dispatch(getAllUsers());
 		setOpen(false);
 	};

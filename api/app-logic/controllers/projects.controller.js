@@ -105,14 +105,30 @@ const deleteProject = async (req, res) => {
 };
 const markAsComplete = async (req, res) => {
 	try {
-		console.log("hello, markascomplete ran");
 		const { id } = req.params;
+		const { status } = req.body;
 		const pool = await mssql.connect(sqlConfig);
-		const data = await pool
-			.request()
-			.input("id", mssql.Int, id)
-			.execute("dbo.spProjects_MarkAsComplete ");
-		res.status(200).json(data.recordset[0]);
+		if (status === "complete") {
+			const data = await pool
+				.request()
+				.input("id", mssql.Int, id)
+				.execute("dbo.spProjects_MarkAsComplete");
+			console.log(data.recordset[0]);
+			if (
+				data.recordset[0].message ===
+				"Cannot complete project because of pending tasks"
+			)
+				return res.status(404).send({ message: data.recordset[0].message });
+			res.status(200).json(data.recordset[0]);
+		}
+		if (status === "incomplete") {
+			console.log(status, id);
+			const data = await pool
+				.request()
+				.input("id", mssql.Int, id)
+				.execute("dbo.spProjects_UnMarkAsComplete");
+			res.status(200).json(data.recordset);
+		}
 	} catch (error) {
 		res.status(500).send({ message: error.message });
 	}

@@ -187,7 +187,11 @@ function DashboardContent() {
 						{/* <ProjectsTable /> */}
 
 						<Grid container spacing={3}></Grid>
-						<Copyright sx={{ pt: 4 }} />
+						<Copyright
+							sx={{
+								pt: 4,
+							}}
+						/>
 					</Container>
 				</Box>
 			</Box>

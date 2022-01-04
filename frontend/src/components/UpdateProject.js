@@ -116,7 +116,7 @@ export default function UpdateProject({ projectId }) {
 					onClose={handleClose}>
 					{singleProject[0].name} Details
 				</BootstrapDialogTitle>
-				<Box component='form' onSubmit={handleSubmit} noValidate>
+				<Box component='form' onSubmit={handleSubmit}>
 					<DialogContent dividers>
 						<TextField
 							id='outlined-basic'

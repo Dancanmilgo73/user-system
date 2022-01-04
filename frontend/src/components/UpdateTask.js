@@ -17,6 +17,7 @@ import {
 	updateProject,
 } from "../redux/actions/projects.actions";
 import Box from "@mui/material/Box";
+import { updateTask } from "../redux/actions/tasks.action";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 	"& .MuiDialogContent-root": {
@@ -55,7 +56,7 @@ BootstrapDialogTitle.propTypes = {
 	onClose: PropTypes.func.isRequired,
 };
 
-export default function UpdateTask({ projectId }) {
+export default function UpdateTask({ task }) {
 	// const initialFormVals = { name: project.name, description: "" };
 	// console.log(projectId);
 	const dispatch = useDispatch();
@@ -75,8 +76,8 @@ export default function UpdateTask({ projectId }) {
 		setOpen(false);
 	};
 	const [values, setValues] = useState({
-		projectName: "",
-		projectDescription: "",
+		taskName: task.name,
+		taskDescription: task.description,
 	});
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -88,12 +89,12 @@ export default function UpdateTask({ projectId }) {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (values.projectName.length || values.projectDescription.length) {
+		if (values.taskName.length || values.taskDescription.length) {
 			dispatch(
-				updateProject({
-					name: values.projectName,
-					description: values.projectDescription,
-					id: projectId,
+				updateTask({
+					name: values.taskName,
+					description: values.taskDescription,
+					id: task.id,
 				})
 			);
 		}
@@ -114,30 +115,30 @@ export default function UpdateTask({ projectId }) {
 				<BootstrapDialogTitle
 					id='customized-dialog-title'
 					onClose={handleClose}>
-					{singleProject[0].name} Details
+					{task.name} Details
 				</BootstrapDialogTitle>
 				<Box component='form' onSubmit={handleSubmit} noValidate>
 					<DialogContent dividers>
 						<TextField
 							id='outlined-basic'
-							label='Project Name'
+							label='Task Name'
 							variant='outlined'
 							fullWidth
 							margin='normal'
 							required
-							name='projectName'
-							value={values.projectName}
+							name='taskName'
+							value={values.taskName}
 							onChange={handleChange}
 						/>
 						<TextField
 							id='outlined-basic'
-							label='Project Description'
+							label='Task Description'
 							variant='outlined'
 							fullWidth
 							margin='normal'
 							required
-							name='projectDescription'
-							value={values.projectDescription}
+							name='taskDescription'
+							value={values.taskDescription}
 							onChange={handleChange}
 						/>
 					</DialogContent>

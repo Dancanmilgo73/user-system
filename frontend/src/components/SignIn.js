@@ -86,7 +86,7 @@ export default function SignIn() {
 					<Box
 						component='form'
 						onSubmit={handleSubmit}
-						noValidate
+						// noValidate
 						sx={{ mt: 1 }}>
 						<TextField
 							margin='normal'
@@ -109,10 +109,7 @@ export default function SignIn() {
 							id='password'
 							autoComplete='current-password'
 						/>
-						{/* <FormControlLabel
-							control={<Checkbox value='remember' color='primary' />}
-							label='Remember me'
-						/> */}
+
 						<Button
 							type='submit'
 							fullWidth

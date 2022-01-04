@@ -5,7 +5,6 @@ const {
 	updateUser,
 	deleteUser,
 	getAllUsers,
-	sendEmailOnRegister,
 	sendSMSOnRegister,
 } = require("../controllers/users.controller");
 const { Authenticator, isAdmin } = require("../middlewares/Authenticator");
@@ -19,7 +18,7 @@ router
 router.route("/login").post(loginUser);
 router.route("/register").post(registerUser, loginUser);
 // Only the admin and the user who owns the account can update one's details
-router.route("/update").patch(Authenticator, isAdmin, updateUser);
+router.route("/update").post(Authenticator, isAdmin, updateUser);
 // Only the admin and the user who owns the account can delete ones details
 router.route("/delete/:email").delete(Authenticator, isAdmin, deleteUser);
 // Route accessible to the background email service

@@ -5,6 +5,7 @@ import {
 	SIGNUP_FAIL,
 	SIGNUP_REQUEST,
 	SIGNUP_SUCCESS,
+	UPDATE_USER_SUCCESS,
 } from "../actionTypes";
 
 const initialState = {
@@ -36,6 +37,12 @@ export const authReducer = (state = initialState, { type, payload }) => {
 				loading: false,
 				token: payload.accessToken,
 				userDetails: payload.userDetails,
+			};
+		case UPDATE_USER_SUCCESS:
+			return {
+				...state,
+				token: payload.accessToken,
+				userDetails: payload.user,
 			};
 		case SIGNUP_SUCCESS:
 			return {

@@ -1,0 +1,26 @@
+.settings {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	/* align-items: center; */
+	height: 70vh;
+}
+.settings-image {
+	flex: 0.25;
+	background-image: url("../Assets/undraw_switches_1js3.svg");
+	/* width: 30%; */
+	height: 100%;
+	/* width: 100%; */
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100% 100%;
+	/* background-color: rgb(226, 226, 245); */
+}
+.settings-main {
+	flex: 0.7;
+	display: flex;
+	flex-direction: column;
+	/* justify-content: flex-start; */
+	align-items: flex-start;
+	/* height: 100vh; */
+}
