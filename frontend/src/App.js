@@ -4,7 +4,6 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
-// import TaskList from "./components/TasksList";
 
 function App() {
 	return (

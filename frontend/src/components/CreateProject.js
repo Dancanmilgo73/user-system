@@ -8,7 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import { addProject, getProjects } from "../redux/actions/projects.actions";
-// import TextField from "@mui/material/TextField";
+
 import { useSelector, useDispatch } from "react-redux";
 export default function CreateProject() {
 	const dispatch = useDispatch();

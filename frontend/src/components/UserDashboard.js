@@ -18,7 +18,7 @@ export default function UserDashboard() {
 	useEffect(() => {
 		dispatch(getTasks());
 		dispatch(getProjects());
-	}, []);
+	}, [dispatch]);
 
 	const { tasks } = useSelector((state) => state.tasks);
 	const { projects } = useSelector((state) => state.projects);

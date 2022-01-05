@@ -9,24 +9,19 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
+
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import SideBar, { mainListItems, secondaryListItems } from "./listItems";
-import ProjectsTable from "./ProjectsTable";
-import UsersList from "./UsersList";
-// import TasksTable from "./TasksList";
+
+import SideBar from "./listItems";
+
 import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 
-// import Chart from "./Chart";
-// import Deposits from "./Deposits";
-// import Orders from "./Orders";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UserDashboard from "./UserDashboard";
 import UserSettings from "./UserSettings";

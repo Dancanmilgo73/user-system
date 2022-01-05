@@ -90,11 +90,7 @@ export default function SignUp() {
 							</Alert>
 						</Stack>
 					)}
-					<Box
-						component='form'
-						noValidate
-						onSubmit={handleSubmit}
-						sx={{ mt: 3 }}>
+					<Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
 								<TextField
@@ -144,6 +140,7 @@ export default function SignUp() {
 								<Autocomplete
 									id='country-select-demo'
 									options={countries}
+									defaultValue={{ code: "KE", label: "Kenya", phone: "254" }}
 									autoHighlight
 									getOptionLabel={(option) => option.phone}
 									renderOption={(props, option) => (
@@ -156,10 +153,10 @@ export default function SignUp() {
 											{...params}
 											label='CODE'
 											name='code'
+											required
 											id='code'
 											inputProps={{
 												...params.inputProps,
-												// autoComplete: "new-password", // disable autocomplete and autofill
 											}}
 										/>
 									)}
@@ -173,6 +170,8 @@ export default function SignUp() {
 									label='phoneNumber'
 									type='tel'
 									id='phoneNumber'
+									placeholder='700 000 940'
+
 									// autoComplete='phoneNumber'
 								/>
 							</Grid>
